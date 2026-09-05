@@ -2,138 +2,168 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0e1015">
+    <meta name="description" content="Menu digital officiel de Boscoffee - Cafés d'exception, gourmandises, jus frais, crêpes et formules petit-déjeuner. Scannez et commandez à table.">
+    <title>Boscoffee | Menu Digital & Salon de Thé</title>
 
-    <title>Café El Bahja - Menu</title>
+    <!-- Google Fonts: Playfair Display, Great Vibes (script du menu papier), Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <header class="hero">
-        <div class="overlay">
-            <h1>☕ Café El Bahja</h1>
-            <p>Bienvenue dans notre café</p>
+    <!-- Arrière-plan avec grains de café décoratifs et reflets dorés -->
+    <div class="ambient-glow glow-top"></div>
+    <div class="ambient-glow glow-bottom"></div>
+
+    <!-- En-tête / Header de Marque -->
+    <header class="header">
+        <div class="brand-container">
+            <div class="logo-wrapper">
+                <span class="logo-text">B<span class="bean-icon" aria-label="o"></span>scoffee</span>
+            </div>
+            <p class="brand-subtitle">COFFEE & LOUNGE • MENU DIGITAL</p>
+        </div>
+
+        <div class="header-actions">
+            <button id="search-toggle-btn" class="icon-btn" aria-label="Rechercher" title="Rechercher">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+            <button id="order-drawer-btn" class="icon-btn order-badge-btn" aria-label="Ma Sélection" title="Ma Sélection">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span id="order-count-badge" class="badge">0</span>
+            </button>
         </div>
     </header>
 
-    <main>
-
-        <div class="categories">
-            <button onclick="showCategory('all')" class="active">
-                Tout
-            </button>
-
-            <button onclick="showCategory('coffee')">
-                ☕ Cafés
-            </button>
-
-            <button onclick="showCategory('drinks')">
-                🥤 Boissons
-            </button>
-
-            <button onclick="showCategory('food')">
-                🥪 Snacks
-            </button>
-
-            <button onclick="showCategory('dessert')">
-                🍰 Desserts
-            </button>
+    <!-- Zone de recherche instantanée (dépliable ou directe) -->
+    <div class="search-section" id="search-section">
+        <div class="search-input-box">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="search-input" placeholder="Rechercher un café, crêpe, smoothie, formule..." autocomplete="off">
+            <button id="clear-search-btn" class="clear-btn" aria-label="Effacer">✕</button>
         </div>
+    </div>
 
+    <!-- Navigation Filtres Rapides (Groupes) -->
+    <nav class="macro-nav" aria-label="Groupes du menu">
+        <button class="macro-btn active" data-group="all">✨ Tout le Menu</button>
+        <button class="macro-btn" data-group="chaud">☕ Chauds & Thés</button>
+        <button class="macro-btn" data-group="frais">🍹 Fraîcheurs & Jus</button>
+        <button class="macro-btn" data-group="sucre">🥞 Gourmandises</button>
+        <button class="macro-btn" data-group="sale">🍳 Salé & Formules</button>
+    </nav>
 
-        <section class="menu">
+    <!-- Barre défilante des 14 catégories du menu Boscoffee -->
+    <div class="categories-bar-wrapper">
+        <div class="categories" id="categories-container" role="tablist">
+            <!-- Rendu dynamique par script.js -->
+        </div>
+    </div>
 
-            <!-- Café -->
-            <div class="product" data-category="coffee">
-
-                <div class="product-image">
-                    <img src="images/cafe.jpg" alt="Café">
-                </div>
-
-                <div class="product-info">
-                    <h3>Café Direct</h3>
-                    <p>Café tunisien</p>
-                    <span>2.500 DT</span>
-                </div>
-
-            </div>
-
-
-            <div class="product" data-category="coffee">
-
-                <div class="product-image">
-                    <img src="images/cappuccino.jpg" alt="Cappuccino">
-                </div>
-
-                <div class="product-info">
-                    <h3>Cappuccino</h3>
-                    <p>Espresso avec lait mousseux</p>
-                    <span>5.000 DT</span>
-                </div>
-
-            </div>
-
-
-            <!-- Boisson -->
-            <div class="product" data-category="drinks">
-
-                <div class="product-image">
-                    <img src="images/jus.jpg" alt="Jus">
-                </div>
-
-                <div class="product-info">
-                    <h3>Jus d'orange</h3>
-                    <p>Jus d'orange frais</p>
-                    <span>6.000 DT</span>
-                </div>
-
-            </div>
-
-
-            <!-- Snack -->
-            <div class="product" data-category="food">
-
-                <div class="product-image">
-                    <img src="images/sandwich.jpg" alt="Sandwich">
-                </div>
-
-                <div class="product-info">
-                    <h3>Sandwich Thon</h3>
-                    <p>Thon, salade, tomate et fromage</p>
-                    <span>8.500 DT</span>
-                </div>
-
-            </div>
-
-
-            <!-- Dessert -->
-            <div class="product" data-category="dessert">
-
-                <div class="product-image">
-                    <img src="images/cake.jpg" alt="Gâteau">
-                </div>
-
-                <div class="product-info">
-                    <h3>Gâteau Chocolat</h3>
-                    <p>Gâteau au chocolat fait maison</p>
-                    <span>7.000 DT</span>
-                </div>
-
-            </div>
-
-        </section>
-
+    <!-- Conteneur Principal du Menu -->
+    <main class="menu-container" id="menu-container">
+        <!-- Rendu dynamique complet de toutes les sections par script.js -->
     </main>
 
+    <!-- Barre Flottante de Commande (Apparaît quand au moins 1 article est sélectionné) -->
+    <aside class="floating-order-bar" id="floating-order-bar">
+        <div class="floating-bar-info">
+            <div class="order-items-count"><span id="bar-items-qty">0</span> article(s)</div>
+            <div class="order-total-price"><span id="bar-total-price">0.000</span> <small>DT</small></div>
+        </div>
+        <button id="open-selection-btn" class="view-order-btn">
+            <span>Ma Sélection</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+    </aside>
 
-    <footer>
-        <p>© 2026 Café El Bahja</p>
+    <!-- Modal / Tiroir "Ma Sélection / Pour le Serveur" -->
+    <div class="order-modal-backdrop" id="order-modal-backdrop">
+        <div class="order-modal" id="order-modal">
+            <div class="order-modal-header">
+                <div class="modal-title-box">
+                    <h3>Ma Sélection à Table</h3>
+                    <p>À présenter au serveur lors de la commande</p>
+                </div>
+                <button id="close-modal-btn" class="close-modal-btn" aria-label="Fermer">✕</button>
+            </div>
+
+            <div class="order-modal-body" id="order-modal-items">
+                <!-- Liste des articles commandés -->
+            </div>
+
+            <div class="order-modal-footer">
+                <div class="total-row">
+                    <span>Total Estimé</span>
+                    <span class="total-amount"><strong id="modal-total-price">0.000</strong> DT</span>
+                </div>
+                <div class="modal-actions">
+                    <button id="clear-all-order-btn" class="secondary-btn">Vider</button>
+                    <button id="waiter-view-btn" class="primary-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                        <span>Afficher pour Serveur</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mode Plein Écran pour Serveur (Gros texte lisible instantanément) -->
+    <div class="waiter-fullscreen-view" id="waiter-fullscreen-view">
+        <div class="waiter-view-header">
+            <button id="close-waiter-view-btn" class="back-btn">← Retour</button>
+            <h2>Commande Table</h2>
+            <div class="table-badge">Boscoffee</div>
+        </div>
+        <div class="waiter-view-list" id="waiter-view-list">
+            <!-- Articles en très grand format -->
+        </div>
+        <div class="waiter-view-footer">
+            <div class="waiter-total">Total : <span id="waiter-total-val">0.000</span> DT</div>
+        </div>
+    </div>
+
+    <!-- Toast Notification (ex: "Ajouté à la sélection") -->
+    <div class="toast" id="toast">Article ajouté</div>
+
+    <!-- Pied de Page -->
+    <footer class="footer">
+        <div class="footer-brand">
+            <span class="footer-logo">Boscoffee</span>
+            <p>Le goût de l'excellence à chaque tasse</p>
+        </div>
+        <div class="footer-details">
+            <p class="service-note">☕ Service en salle & terrasse</p>
+            <p class="currency-note">Tous les prix sont affichés en Dinars Tunisiens (DT)</p>
+        </div>
+        <div class="copyright">
+            © 2026 Boscoffee. Menu Digital interactif QR Code.
+        </div>
     </footer>
 
-
+    <!-- Script Logique & Données -->
     <script src="script.js"></script>
-
 </body>
 </html>
