@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Café El Bahja - Menu</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="hero">
+        <div class="overlay">
+            <h1>☕ Café El Bahja</h1>
+            <p>Bienvenue dans notre café</p>
+        </div>
+    </header>
+
+    <main>
+
+        <div class="categories">
+            <button onclick="showCategory('all')" class="active">
+                Tout
+            </button>
+
+            <button onclick="showCategory('coffee')">
+                ☕ Cafés
+            </button>
+
+            <button onclick="showCategory('drinks')">
+                🥤 Boissons
+            </button>
+
+            <button onclick="showCategory('food')">
+                🥪 Snacks
+            </button>
+
+            <button onclick="showCategory('dessert')">
+                🍰 Desserts
+            </button>
+        </div>
+
+
+        <section class="menu">
+
+            <!-- Café -->
+            <div class="product" data-category="coffee">
+
+                <div class="product-image">
+                    <img src="images/cafe.jpg" alt="Café">
+                </div>
+
+                <div class="product-info">
+                    <h3>Café Direct</h3>
+                    <p>Café tunisien</p>
+                    <span>2.500 DT</span>
+                </div>
+
+            </div>
+
+
+            <div class="product" data-category="coffee">
+
+                <div class="product-image">
+                    <img src="images/cappuccino.jpg" alt="Cappuccino">
+                </div>
+
+                <div class="product-info">
+                    <h3>Cappuccino</h3>
+                    <p>Espresso avec lait mousseux</p>
+                    <span>5.000 DT</span>
+                </div>
+
+            </div>
+
+
+            <!-- Boisson -->
+            <div class="product" data-category="drinks">
+
+                <div class="product-image">
+                    <img src="images/jus.jpg" alt="Jus">
+                </div>
+
+                <div class="product-info">
+                    <h3>Jus d'orange</h3>
+                    <p>Jus d'orange frais</p>
+                    <span>6.000 DT</span>
+                </div>
+
+            </div>
+
+
+            <!-- Snack -->
+            <div class="product" data-category="food">
+
+                <div class="product-image">
+                    <img src="images/sandwich.jpg" alt="Sandwich">
+                </div>
+
+                <div class="product-info">
+                    <h3>Sandwich Thon</h3>
+                    <p>Thon, salade, tomate et fromage</p>
+                    <span>8.500 DT</span>
+                </div>
+
+            </div>
+
+
+            <!-- Dessert -->
+            <div class="product" data-category="dessert">
+
+                <div class="product-image">
+                    <img src="images/cake.jpg" alt="Gâteau">
+                </div>
+
+                <div class="product-info">
+                    <h3>Gâteau Chocolat</h3>
+                    <p>Gâteau au chocolat fait maison</p>
+                    <span>7.000 DT</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>© 2026 Café El Bahja</p>
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
