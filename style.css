@@ -1,45 +1,41 @@
 /* ==========================================================================
    BOSCOFFEE - MENU DIGITAL OFFICIEL
-   Charte graphique : Luxe Sombre, Or Brossé, Calligraphie Élégante
+   Design : Identité Visuelle Menu Papier (Noir & Or) + Affichage Style Starbucks
    ========================================================================== */
 
 :root {
-    /* Palette Principale */
+    /* Palette Sombre & Luxe du Menu Papier */
     --bg-main: #0c0d11;
-    --bg-surface: #14151c;
-    --bg-card: #191b24;
-    --bg-card-hover: #212430;
-    --bg-card-selected: #242220;
+    --bg-surface: #13151c;
+    --bg-row: rgba(22, 24, 33, 0.7);
+    --bg-row-hover: rgba(30, 33, 46, 0.9);
+    --bg-row-specialty: linear-gradient(135deg, rgba(34, 30, 22, 0.85) 0%, rgba(20, 22, 30, 0.85) 100%);
 
-    /* Teintes Dorées & Accents */
+    /* Teintes Dorées Fidèles au Papier */
     --gold-primary: #d4af37;
-    --gold-light: #f7e7b4;
-    --gold-dark: #a27e1e;
-    --gold-gradient: linear-gradient(135deg, #f9e8be 0%, #d4af37 50%, #aa7c11 100%);
-    --gold-glow: rgba(212, 175, 55, 0.25);
-    --gold-border: rgba(212, 175, 55, 0.22);
-    --gold-border-focus: rgba(212, 175, 55, 0.6);
+    --gold-light: #f5e4b3;
+    --gold-dark: #9e7b1e;
+    --gold-gradient: linear-gradient(135deg, #f7e6b8 0%, #d4af37 50%, #aa7c11 100%);
+    --gold-glow: rgba(212, 175, 55, 0.22);
+    --gold-border: rgba(212, 175, 55, 0.2);
+    --gold-ring: rgba(212, 175, 55, 0.35);
 
     /* Textes */
     --text-pure: #ffffff;
     --text-primary: #f5f5f7;
     --text-secondary: #9ea4b3;
     --text-muted: #6e7484;
-    --text-gold: #e2c068;
 
     /* Typographies */
     --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-serif: 'Playfair Display', Georgia, serif;
     --font-script: 'Great Vibes', cursive;
 
-    /* Effets & Transitions */
+    /* Effets & Rayons */
     --radius-sm: 8px;
     --radius-md: 14px;
-    --radius-lg: 20px;
     --radius-pill: 50px;
-    --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.4);
-    --shadow-gold: 0 4px 25px rgba(212, 175, 55, 0.15);
-    --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Reset & Base */
@@ -64,10 +60,10 @@ body {
     line-height: 1.5;
     position: relative;
     overflow-x: hidden;
-    padding-bottom: 90px; /* Espace pour la barre flottante */
+    padding-bottom: 30px;
 }
 
-/* Ambiance Lumineuse & Motifs de Fond */
+/* Ambiance Lumineuse & Grains de café dorés */
 .ambient-glow {
     position: fixed;
     border-radius: 50%;
@@ -95,7 +91,7 @@ body {
 }
 
 /* ==========================================================================
-   HEADER & LOGO BOSCOFFEE
+   HEADER & MARQUE BOSCOFFEE
    ========================================================================== */
 
 .header {
@@ -106,10 +102,10 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 14px 20px;
-    background: rgba(12, 13, 17, 0.88);
+    background: rgba(12, 13, 17, 0.92);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
 }
 
 .brand-container {
@@ -126,7 +122,7 @@ body {
 
 .logo-text {
     font-family: var(--font-serif);
-    font-size: 26px;
+    font-size: 27px;
     font-weight: 700;
     letter-spacing: -0.5px;
     color: var(--text-pure);
@@ -135,7 +131,7 @@ body {
     align-items: center;
 }
 
-/* Icône de grain de café à l'intérieur du "o" de Bos */
+/* Grain de café incrusté dans le "o" */
 .bean-icon {
     display: inline-block;
     width: 17px;
@@ -172,7 +168,6 @@ body {
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
 }
 
 .icon-btn {
@@ -186,7 +181,6 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    position: relative;
     transition: var(--transition);
 }
 
@@ -196,37 +190,13 @@ body {
     color: var(--gold-light);
 }
 
-.order-badge-btn .badge {
-    position: absolute;
-    top: -3px;
-    right: -3px;
-    background: var(--gold-gradient);
-    color: #0c0d11;
-    font-size: 11px;
-    font-weight: 700;
-    min-width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    transform: scale(0);
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.order-badge-btn .badge.has-items {
-    transform: scale(1);
-}
-
 /* ==========================================================================
    BARRE DE RECHERCHE
    ========================================================================== */
 
 .search-section {
     padding: 12px 18px 6px;
-    max-width: 960px;
+    max-width: 900px;
     margin: 0 auto;
     position: relative;
     z-index: 10;
@@ -236,7 +206,7 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-    background: rgba(25, 27, 36, 0.85);
+    background: rgba(22, 24, 33, 0.85);
     border: 1px solid rgba(212, 175, 55, 0.2);
     border-radius: var(--radius-pill);
     padding: 2px 16px;
@@ -247,7 +217,7 @@ body {
 .search-input-box:focus-within {
     border-color: var(--gold-primary);
     box-shadow: 0 0 16px rgba(212, 175, 55, 0.22), inset 0 2px 4px rgba(0,0,0,0.5);
-    background: rgba(28, 31, 42, 0.95);
+    background: rgba(26, 29, 40, 0.95);
 }
 
 .search-icon {
@@ -262,7 +232,7 @@ body {
     border: none;
     outline: none;
     color: var(--text-pure);
-    font-size: 14px;
+    font-size: 14.5px;
     font-family: var(--font-sans);
     padding: 11px 0;
 }
@@ -293,16 +263,16 @@ body {
 }
 
 /* ==========================================================================
-   NAVIGATION MACRO-GROUPES & CATÉGORIES DÉFILANTES
+   NAVIGATION STYLE STARBUCKS (MACRO-GROUPES & PILULES)
    ========================================================================== */
 
 .macro-nav {
     display: flex;
     gap: 8px;
-    padding: 10px 18px 4px;
+    padding: 8px 18px 4px;
     overflow-x: auto;
-    scrollbar-width: none; /* Firefox */
-    max-width: 960px;
+    scrollbar-width: none;
+    max-width: 900px;
     margin: 0 auto;
     position: relative;
     z-index: 10;
@@ -314,9 +284,9 @@ body {
 
 .macro-btn {
     background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--text-secondary);
-    padding: 8px 14px;
+    padding: 7px 14px;
     border-radius: var(--radius-pill);
     font-size: 12.5px;
     font-weight: 500;
@@ -339,19 +309,19 @@ body {
     position: sticky;
     top: 71px;
     z-index: 90;
-    background: rgba(12, 13, 17, 0.94);
+    background: rgba(12, 13, 17, 0.95);
     backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 10px 0;
+    padding: 9px 0;
 }
 
 .categories {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     overflow-x: auto;
     padding: 0 18px;
     scrollbar-width: none;
-    max-width: 960px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
@@ -360,10 +330,10 @@ body {
 }
 
 .cat-pill {
-    background: var(--bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: var(--bg-surface);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--text-secondary);
-    padding: 8px 16px;
+    padding: 7px 15px;
     border-radius: var(--radius-pill);
     font-size: 13.5px;
     font-weight: 500;
@@ -390,16 +360,16 @@ body {
     color: #0c0d11;
     font-weight: 700;
     border-color: transparent;
-    box-shadow: 0 3px 14px rgba(212, 175, 55, 0.35);
+    box-shadow: 0 3px 12px rgba(212, 175, 55, 0.35);
     transform: translateY(-1px);
 }
 
 /* ==========================================================================
-   CONTENEUR DU MENU & SECTIONS
+   SECTIONS DU MENU (TITRES SCRIPT DU MENU PAPIER)
    ========================================================================== */
 
 .menu-container {
-    max-width: 960px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 16px 18px 40px;
     position: relative;
@@ -417,7 +387,7 @@ body {
     justify-content: space-between;
     margin-bottom: 16px;
     padding-bottom: 8px;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.22);
     position: relative;
 }
 
@@ -426,7 +396,7 @@ body {
     position: absolute;
     bottom: -1px;
     left: 0;
-    width: 60px;
+    width: 70px;
     height: 2px;
     background: var(--gold-gradient);
 }
@@ -436,13 +406,13 @@ body {
     flex-direction: column;
 }
 
-/* Titre calligraphique fidèle à la carte papier */
+/* Titre calligraphique identique au menu papier Boscoffee */
 .category-script {
     font-family: var(--font-script);
-    font-size: 30px;
+    font-size: 34px;
     color: var(--gold-primary);
     line-height: 1;
-    margin-bottom: -4px;
+    margin-bottom: -3px;
     letter-spacing: 0.5px;
     text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
 }
@@ -473,104 +443,106 @@ body {
     border-radius: var(--radius-pill);
 }
 
-/* Grille de produits */
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 14px;
-}
-
 /* ==========================================================================
-   CARTE PRODUIT
+   LISTE DE PRODUITS STYLE STARBUCKS (AVATAR ROND + NOM + PRIX ALIGNÉ)
    ========================================================================== */
 
-.product-card {
-    background: var(--bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-md);
-    padding: 16px 18px;
+.sb-products-list {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 10px;
+}
+
+/* Ligne produit Starbucks en Dark & Gold Boscoffee */
+.sb-item-row {
+    background: var(--bg-row);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
     transition: var(--transition);
     position: relative;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.product-card:hover {
-    border-color: rgba(212, 175, 55, 0.25);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-    background: var(--bg-card-hover);
+.sb-item-row:hover {
+    background: var(--bg-row-hover);
+    border-color: rgba(212, 175, 55, 0.28);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
-/* Carte sélectionnée dans la commande */
-.product-card.selected {
-    border-color: var(--gold-primary);
-    background: rgba(30, 27, 21, 0.85);
-    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.16);
-}
-
-/* Carte Signature Bosco */
-.product-card.specialty-card {
+/* Produit Spécialité Signature Bosco */
+.sb-item-row.is-specialty {
+    background: var(--bg-row-specialty);
     border-color: rgba(212, 175, 55, 0.35);
-    background: linear-gradient(145deg, rgba(29, 28, 26, 0.95), rgba(20, 22, 30, 0.95));
 }
 
-.product-card.specialty-card::before {
-    content: "★ MAISON";
-    position: absolute;
-    top: -8px;
-    right: 16px;
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    background: var(--gold-gradient);
-    color: #0c0d11;
-    padding: 2px 7px;
-    border-radius: 4px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+/* 1. Pastille Circulaire Iconique style Starbucks */
+.sb-item-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(212, 175, 55, 0.22) 0%, rgba(18, 20, 28, 0.95) 75%);
+    border: 1.5px solid var(--gold-ring);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(212, 175, 55, 0.3);
+    transition: var(--transition);
 }
 
-.product-content {
+.sb-item-row:hover .sb-item-avatar {
+    border-color: var(--gold-primary);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
+    transform: scale(1.05);
+}
+
+.sb-avatar-icon {
+    font-size: 22px;
+    line-height: 1;
+}
+
+/* 2. Détails Produit : Titre et Description */
+.sb-item-details {
+    flex: 1;
+    min-width: 0; /* Permet la gestion des textes longs */
     display: flex;
     flex-direction: column;
-    height: 100%;
-    justify-content: space-between;
+    justify-content: center;
 }
 
-.product-header-row {
+.sb-item-name-wrap {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 2px;
 }
 
-.product-name {
+.sb-item-name {
     font-size: 15.5px;
     font-weight: 600;
     color: var(--text-pure);
-    line-height: 1.35;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px;
+    line-height: 1.3;
 }
 
-.signature-tag {
-    font-size: 10px;
-    font-weight: 700;
+.sb-badge-specialty {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
     color: #0c0d11;
     background: var(--gold-gradient);
     padding: 1px 6px;
     border-radius: 4px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
-.supplement-tag {
-    font-size: 10px;
+.sb-badge-option {
+    font-size: 9.5px;
     font-weight: 600;
     color: #e5b958;
     background: rgba(229, 185, 88, 0.15);
@@ -579,121 +551,45 @@ body {
     border-radius: 4px;
 }
 
-/* Prix en DT */
-.product-price {
+.sb-item-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+/* 3. Prix Aligné à Droite */
+.sb-item-price-wrap {
     display: flex;
     align-items: baseline;
     gap: 3px;
-    background: rgba(212, 175, 55, 0.12);
-    border: 1px solid rgba(212, 175, 55, 0.22);
-    padding: 4px 9px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 5px 9px;
     border-radius: var(--radius-sm);
     flex-shrink: 0;
+    text-align: right;
 }
 
-.price-val {
-    font-size: 15px;
+.sb-item-price {
+    font-size: 15.5px;
     font-weight: 700;
     color: var(--gold-light);
     letter-spacing: -0.3px;
 }
 
-.price-curr {
+.sb-item-currency {
     font-size: 11px;
     font-weight: 700;
     color: var(--gold-primary);
 }
 
-.product-desc {
-    font-size: 13px;
-    color: var(--text-secondary);
-    line-height: 1.45;
-    margin-bottom: 14px;
-}
-
-/* Actions & Contrôle de quantité */
-.product-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: auto;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.quantity-controller {
-    display: none;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    border-radius: var(--radius-pill);
-    padding: 2px 5px;
-    gap: 6px;
-}
-
-.quantity-controller.active {
-    display: flex;
-}
-
-.qty-btn {
-    background: transparent;
-    border: none;
-    color: var(--gold-light);
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.qty-btn:hover {
-    background: rgba(212, 175, 55, 0.25);
-    color: white;
-}
-
-.qty-display {
-    font-size: 14px;
-    font-weight: 700;
-    min-width: 18px;
-    text-align: center;
-    color: var(--text-pure);
-}
-
-.quick-add-btn {
-    background: rgba(212, 175, 55, 0.1);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    color: var(--gold-light);
-    font-size: 12.5px;
-    font-weight: 600;
-    padding: 6px 14px;
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.quick-add-btn:hover {
-    background: var(--gold-gradient);
-    color: #0c0d11;
-    border-color: transparent;
-    box-shadow: 0 3px 10px rgba(212, 175, 55, 0.3);
-}
-
-.quick-add-btn.has-qty {
-    background: rgba(212, 175, 55, 0.22);
-    border-color: var(--gold-primary);
-    color: var(--gold-light);
-}
-
-/* État de recherche vide */
+/* État recherche vide */
 .empty-state {
     text-align: center;
     padding: 60px 20px;
-    background: var(--bg-card);
-    border-radius: var(--radius-lg);
+    background: var(--bg-surface);
+    border-radius: var(--radius-md);
     border: 1px dashed rgba(212, 175, 55, 0.25);
     margin: 30px auto;
     max-width: 500px;
@@ -728,486 +624,20 @@ body {
 }
 
 /* ==========================================================================
-   BARRE FLOTTANTE DE SÉLECTION (STICKY BOTTOM BAR)
-   ========================================================================== */
-
-.floating-order-bar {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%) translateY(120px);
-    width: calc(100% - 36px);
-    max-width: 500px;
-    background: rgba(20, 22, 30, 0.94);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid var(--gold-primary);
-    border-radius: var(--radius-pill);
-    padding: 8px 10px 8px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.25);
-    z-index: 95;
-    transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.floating-order-bar.visible {
-    transform: translateX(-50%) translateY(0);
-}
-
-.floating-bar-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.order-items-count {
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.order-total-price {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--gold-light);
-    line-height: 1.1;
-}
-
-.order-total-price small {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--gold-primary);
-}
-
-.view-order-btn {
-    background: var(--gold-gradient);
-    color: #0c0d11;
-    border: none;
-    padding: 10px 20px;
-    border-radius: var(--radius-pill);
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 3px 12px rgba(212, 175, 55, 0.3);
-    transition: var(--transition);
-}
-
-.view-order-btn:hover {
-    transform: scale(1.03);
-}
-
-/* ==========================================================================
-   MODAL / TIROIR DE COMMANDE "MA SÉLECTION"
-   ========================================================================== */
-
-.order-modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(8px);
-    z-index: 200;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
-}
-
-.order-modal-backdrop.open {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.order-modal {
-    background: var(--bg-surface);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    border-bottom: none;
-    border-radius: 24px 24px 0 0;
-    width: 100%;
-    max-width: 600px;
-    max-height: 85vh;
-    display: flex;
-    flex-direction: column;
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7);
-}
-
-.order-modal-backdrop.open .order-modal {
-    transform: translateY(0);
-}
-
-.order-modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 22px 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.modal-title-box h3 {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text-pure);
-}
-
-.modal-title-box p {
-    font-size: 12.5px;
-    color: var(--text-secondary);
-}
-
-.close-modal-btn {
-    background: rgba(255, 255, 255, 0.08);
-    border: none;
-    color: var(--text-secondary);
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition);
-}
-
-.close-modal-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-.order-modal-body {
-    padding: 16px 22px;
-    overflow-y: auto;
-    max-height: 50vh;
-}
-
-.order-modal-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.modal-row-info {
-    display: flex;
-    flex-direction: column;
-    max-width: 55%;
-}
-
-.modal-item-name {
-    font-size: 14.5px;
-    font-weight: 600;
-    color: var(--text-pure);
-}
-
-.modal-item-unit {
-    font-size: 12px;
-    color: var(--gold-dark);
-}
-
-.modal-row-actions {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.modal-qty-ctrl {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    border-radius: var(--radius-pill);
-    padding: 2px 6px;
-    gap: 8px;
-}
-
-.modal-qty-btn {
-    background: transparent;
-    border: none;
-    color: var(--gold-light);
-    font-size: 16px;
-    font-weight: bold;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-}
-
-.modal-qty-val {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: white;
-    min-width: 14px;
-    text-align: center;
-}
-
-.modal-row-subtotal {
-    font-size: 14.5px;
-    font-weight: 700;
-    color: var(--gold-light);
-    min-width: 65px;
-    text-align: right;
-}
-
-.modal-empty-state {
-    text-align: center;
-    padding: 40px 10px;
-}
-
-.empty-cup {
-    font-size: 38px;
-    margin-bottom: 8px;
-}
-
-.modal-empty-state h4 {
-    font-size: 16px;
-    color: var(--text-primary);
-    margin-bottom: 4px;
-}
-
-.modal-empty-state p {
-    font-size: 13px;
-    color: var(--text-muted);
-}
-
-.order-modal-footer {
-    padding: 16px 22px 24px;
-    background: rgba(15, 17, 23, 0.95);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.total-row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 16px;
-    color: var(--text-secondary);
-}
-
-.total-amount {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--gold-light);
-}
-
-.modal-actions {
-    display: flex;
-    gap: 12px;
-}
-
-.secondary-btn {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: var(--text-secondary);
-    padding: 12px 18px;
-    border-radius: var(--radius-pill);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.secondary-btn:hover {
-    background: rgba(255, 60, 60, 0.15);
-    border-color: rgba(255, 60, 60, 0.3);
-    color: #ff8080;
-}
-
-.primary-btn {
-    flex: 1;
-    background: var(--gold-gradient);
-    border: none;
-    color: #0c0d11;
-    padding: 12px 20px;
-    border-radius: var(--radius-pill);
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
-    transition: var(--transition);
-}
-
-.primary-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
-}
-
-/* ==========================================================================
-   MODE PLEIN ÉCRAN SERVEUR (AFFICHAGE CLAIR & VISIBLE À TABLE)
-   ========================================================================== */
-
-.waiter-fullscreen-view {
-    position: fixed;
-    inset: 0;
-    background: #08090c;
-    z-index: 300;
-    display: flex;
-    flex-direction: column;
-    padding: 24px 20px;
-    transform: scale(0.95);
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.25s ease;
-}
-
-.waiter-fullscreen-view.active {
-    transform: scale(1);
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.waiter-view-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 18px;
-    border-bottom: 2px solid var(--gold-primary);
-    margin-bottom: 20px;
-}
-
-.back-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 8px 16px;
-    border-radius: var(--radius-pill);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.waiter-view-header h2 {
-    font-size: 20px;
-    color: var(--text-pure);
-}
-
-.table-badge {
-    background: var(--gold-gradient);
-    color: #0c0d11;
-    padding: 6px 12px;
-    border-radius: var(--radius-pill);
-    font-size: 13px;
-    font-weight: 800;
-    text-transform: uppercase;
-}
-
-.waiter-view-list {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.waiter-card-item {
-    background: #141620;
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    border-radius: var(--radius-md);
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.waiter-item-qty {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--gold-primary);
-    background: rgba(212, 175, 55, 0.12);
-    padding: 4px 12px;
-    border-radius: var(--radius-sm);
-    min-width: 56px;
-    text-align: center;
-}
-
-.waiter-item-details {
-    flex: 1;
-}
-
-.waiter-name {
-    font-size: 19px;
-    font-weight: 700;
-    color: var(--text-pure);
-}
-
-.waiter-sub {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-top: 2px;
-}
-
-.waiter-price {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--gold-light);
-}
-
-.waiter-view-footer {
-    padding-top: 18px;
-    border-top: 2px solid rgba(212, 175, 55, 0.3);
-    text-align: center;
-}
-
-.waiter-total {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--gold-light);
-}
-
-/* ==========================================================================
-   TOAST NOTIFICATION
-   ========================================================================== */
-
-.toast {
-    position: fixed;
-    top: 75px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-30px);
-    background: rgba(20, 22, 30, 0.95);
-    border: 1px solid var(--gold-primary);
-    color: var(--gold-light);
-    font-size: 13.5px;
-    font-weight: 600;
-    padding: 8px 20px;
-    border-radius: var(--radius-pill);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 250;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.toast.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-}
-
-/* ==========================================================================
    FOOTER
    ========================================================================== */
 
 .footer {
     border-top: 1px solid rgba(212, 175, 55, 0.15);
     background: #090a0d;
-    padding: 40px 20px 60px;
+    padding: 40px 20px 50px;
     text-align: center;
     position: relative;
     z-index: 10;
 }
 
 .footer-brand {
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .footer-logo {
@@ -1226,7 +656,7 @@ body {
 }
 
 .footer-details {
-    margin-bottom: 22px;
+    margin-bottom: 20px;
 }
 
 .service-note {
@@ -1246,7 +676,7 @@ body {
 }
 
 /* ==========================================================================
-   RESPONSIVE & MOBILE OPTIMISATIONS
+   OPTIMISATIONS SMARTPHONE (ÉCRAN MOBILE ÉPURÉ & ULTRA LISIBLE)
    ========================================================================== */
 
 @media (max-width: 680px) {
@@ -1272,34 +702,36 @@ body {
     }
 
     .category-script {
-        font-size: 26px;
+        font-size: 28px;
     }
 
     .category-main-title {
         font-size: 17px;
     }
 
-    .products-grid {
-        grid-template-columns: 1fr;
+    .sb-item-row {
+        padding: 11px 13px;
         gap: 12px;
     }
 
-    .product-card {
-        padding: 14px 16px;
+    .sb-item-avatar {
+        width: 44px;
+        height: 44px;
     }
 
-    .product-name {
+    .sb-avatar-icon {
+        font-size: 20px;
+    }
+
+    .sb-item-name {
         font-size: 15px;
     }
 
-    .floating-order-bar {
-        width: calc(100% - 24px);
-        bottom: 14px;
-        padding: 6px 8px 6px 16px;
+    .sb-item-desc {
+        font-size: 12.5px;
     }
 
-    .view-order-btn {
-        padding: 8px 16px;
-        font-size: 13px;
+    .sb-item-price {
+        font-size: 14.5px;
     }
 }
