@@ -480,30 +480,50 @@ body {
     border-color: rgba(212, 175, 55, 0.35);
 }
 
-/* 1. Pastille Circulaire Iconique style Starbucks */
+/* 1. Photo Agrandie Généreuse style Starbucks Gourmet (78px) */
 .sb-item-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, rgba(212, 175, 55, 0.22) 0%, rgba(18, 20, 28, 0.95) 75%);
-    border: 1.5px solid var(--gold-ring);
+    width: 78px;
+    height: 78px;
+    border-radius: 16px;
+    background: #141722;
+    border: 1.5px solid var(--gold-border);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(212, 175, 55, 0.3);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
     transition: var(--transition);
+}
+
+.sb-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sb-item-row:hover .sb-avatar-img {
+    transform: scale(1.08);
 }
 
 .sb-item-row:hover .sb-item-avatar {
     border-color: var(--gold-primary);
-    box-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
-    transform: scale(1.05);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.3);
 }
 
-.sb-avatar-icon {
-    font-size: 22px;
+.sb-avatar-icon,
+.sb-avatar-fallback {
+    font-size: 32px;
     line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 35% 35%, rgba(212, 175, 55, 0.22) 0%, rgba(18, 20, 28, 0.95) 75%);
 }
 
 /* 2. Détails Produit : Titre et Description */
@@ -710,17 +730,19 @@ body {
     }
 
     .sb-item-row {
-        padding: 11px 13px;
-        gap: 12px;
+        padding: 12px 14px;
+        gap: 13px;
     }
 
     .sb-item-avatar {
-        width: 44px;
-        height: 44px;
+        width: 72px;
+        height: 72px;
+        border-radius: 14px;
     }
 
-    .sb-avatar-icon {
-        font-size: 20px;
+    .sb-avatar-icon,
+    .sb-avatar-fallback {
+        font-size: 28px;
     }
 
     .sb-item-name {
@@ -729,6 +751,7 @@ body {
 
     .sb-item-desc {
         font-size: 12.5px;
+        line-height: 1.35;
     }
 
     .sb-item-price {
