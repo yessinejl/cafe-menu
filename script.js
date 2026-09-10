@@ -242,17 +242,83 @@ const MENU_DATA = [
     }
 ];
 
-// État de navigation
+// État de navigation, Thème & Vue
 let activeCategoryId = "all";
 let activeGroup = "all";
 let searchQuery = "";
+let isTerrasseMode = localStorage.getItem("boscoffee_terrasse_mode") === "true";
+let currentViewMode = localStorage.getItem("boscoffee_view_mode") || "list";
 
 // Initialisation au chargement de la page
 document.addEventListener("DOMContentLoaded", () => {
+    initTheme();
+    initViewMode();
     renderCategoriesBar();
     renderMenu();
     setupEventListeners();
+    setupModalEventListeners();
+    setupLightboxListeners();
+    setupCartEventListeners();
+    loadSelection();
 });
+
+// Gestion du Mode d'Affichage (Liste Starbucks vs Grille Gourmande)
+function initViewMode() {
+    setViewMode(currentViewMode, false);
+}
+
+function setViewMode(mode, save = true) {
+    currentViewMode = mode;
+    if (save) {
+        localStorage.setItem("boscoffee_view_mode", mode);
+    }
+
+    const menuContainer = document.getElementById("menu-container");
+    if (menuContainer) {
+        menuContainer.classList.toggle("view-grid", mode === "grid");
+        menuContainer.classList.toggle("view-list", mode === "list");
+    }
+
+    const listBtn = document.getElementById("view-list-btn");
+    const gridBtn = document.getElementById("view-grid-btn");
+    if (listBtn) listBtn.classList.toggle("active", mode === "list");
+    if (gridBtn) gridBtn.classList.toggle("active", mode === "grid");
+}
+
+// Gestion du Thème Terrasse / Plein Soleil vs Lounge Sombre
+function initTheme() {
+    applyTheme(isTerrasseMode);
+}
+
+function toggleTheme() {
+    isTerrasseMode = !isTerrasseMode;
+    localStorage.setItem("boscoffee_terrasse_mode", isTerrasseMode);
+    applyTheme(isTerrasseMode);
+}
+
+function applyTheme(isTerrasse) {
+    const btn = document.getElementById("theme-toggle-btn");
+    const icon = btn ? btn.querySelector(".theme-icon") : null;
+    const badge = btn ? btn.querySelector(".theme-label-badge") : null;
+
+    if (isTerrasse) {
+        document.body.classList.add("terrasse-mode");
+        if (icon) icon.textContent = "🌙";
+        if (badge) badge.textContent = "Lounge";
+        if (btn) {
+            btn.setAttribute("title", "Passer en Mode Lounge (Sombre)");
+            btn.setAttribute("aria-label", "Basculer en Mode Lounge (Sombre)");
+        }
+    } else {
+        document.body.classList.remove("terrasse-mode");
+        if (icon) icon.textContent = "☀️";
+        if (badge) badge.textContent = "Terrasse";
+        if (btn) {
+            btn.setAttribute("title", "Passer en Mode Terrasse (Plein Soleil)");
+            btn.setAttribute("aria-label", "Basculer en Mode Terrasse (Plein Soleil)");
+        }
+    }
+}
 
 // Rendu des boutons de catégories (Barre défilante horizontale)
 function renderCategoriesBar() {
@@ -348,6 +414,7 @@ function renderMenu() {
 
     const query = searchQuery.trim().toLowerCase();
     let sectionsHtml = "";
+    let totalMatched = 0;
 
     filteredCategories.forEach(cat => {
         const matchingItems = cat.items.filter(item => {
@@ -360,9 +427,25 @@ function renderMenu() {
         });
 
         if (matchingItems.length > 0) {
+            totalMatched += matchingItems.length;
             sectionsHtml += renderCategorySection(cat, matchingItems);
         }
     });
+
+    // Mettre à jour le compteur dynamique de la barre d'outils
+    const countEl = document.getElementById("toolbar-count-text");
+    if (countEl) {
+        if (query) {
+            countEl.textContent = `${totalMatched} résultat${totalMatched > 1 ? 's' : ''} trouvé${totalMatched > 1 ? 's' : ''}`;
+        } else if (activeCategoryId !== "all") {
+            const currentCat = MENU_DATA.find(c => c.id === activeCategoryId);
+            countEl.textContent = `${totalMatched} choix dans ${currentCat ? currentCat.title : ''}`;
+        } else if (activeGroup !== "all") {
+            countEl.textContent = `${totalMatched} choix sélectionnés`;
+        } else {
+            countEl.textContent = `${totalMatched} délices au menu`;
+        }
+    }
 
     if (sectionsHtml === "") {
         container.innerHTML = `
@@ -386,12 +469,16 @@ function renderCategorySection(cat, items) {
         <section class="category-section" id="section-${cat.id}" data-category="${cat.id}">
             <div class="category-header">
                 <div class="category-title-box">
-                    <span class="category-script">${cat.title}</span>
-                    <h2 class="category-main-title">
-                        <span class="cat-icon-lg">${cat.icon}</span> ${cat.title}
-                    </h2>
+                    <div class="category-title-row">
+                        <span class="cat-icon-lg" aria-hidden="true">${cat.icon}</span>
+                        <h2 class="category-main-title">${escapeHtml(cat.title)}</h2>
+                    </div>
+                    <div class="category-desc-line">
+                        ${cat.badge ? `<span class="category-badge-inline">${escapeHtml(cat.badge)}</span> • ` : ''}
+                        <span class="category-items-count">${items.length} choix disponible${items.length > 1 ? 's' : ''}</span>
+                    </div>
                 </div>
-                ${cat.badge ? `<span class="category-badge">${cat.badge}</span>` : ""}
+                <div class="category-badge-pill">${items.length} choix</div>
             </div>
 
             <div class="sb-products-list">
@@ -410,7 +497,7 @@ function renderStarbucksStyleRow(item) {
     const itemImg = item.img || "";
 
     return `
-        <div class="sb-item-row ${isSpecialty ? 'is-specialty' : ''}" id="product-${item.id}">
+        <div class="sb-item-row ${isSpecialty ? 'is-specialty' : ''}" id="product-${item.id}" data-item-id="${item.id}" role="button" tabindex="0" aria-label="Voir la fiche de ${escapeHtml(item.name)}, ${formattedPrice} DT">
             <!-- Photo Agrandie Généreuse (75px-80px) -->
             <div class="sb-item-avatar ${!itemImg ? 'is-fallback' : ''}" aria-hidden="true">
                 ${itemImg ? `
@@ -435,10 +522,18 @@ function renderStarbucksStyleRow(item) {
                 ${item.desc ? `<p class="sb-item-desc">${escapeHtml(item.desc)}</p>` : ''}
             </div>
 
-            <!-- Prix en Dinars Tunisiens (DT) aligné à droite -->
-            <div class="sb-item-price-wrap">
-                <span class="sb-item-price">${formattedPrice}</span>
-                <span class="sb-item-currency">DT</span>
+            <!-- Actions Produit : Prix + Bouton Ajout Rapide (+) -->
+            <div class="sb-item-actions">
+                <div class="sb-item-price-wrap">
+                    <span class="sb-item-price">${formattedPrice}</span>
+                    <span class="sb-item-currency">DT</span>
+                </div>
+                <button class="sb-item-quick-add-btn" data-add-id="${item.id}" aria-label="Ajouter ${escapeHtml(item.name)} à ma note" title="Ajouter à ma note">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
             </div>
         </div>
     `;
@@ -471,6 +566,30 @@ function setupEventListeners() {
         });
     }
 
+    // Bouton de bascule de thème (Mode Terrasse / Lounge)
+    const themeToggleBtn = document.getElementById("theme-toggle-btn");
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener("click", () => {
+            toggleTheme();
+        });
+    }
+
+    // Boutons de bascule de vue (Grille / Liste)
+    const listBtn = document.getElementById("view-list-btn");
+    const gridBtn = document.getElementById("view-grid-btn");
+
+    if (listBtn) {
+        listBtn.addEventListener("click", () => {
+            setViewMode("list");
+        });
+    }
+
+    if (gridBtn) {
+        gridBtn.addEventListener("click", () => {
+            setViewMode("grid");
+        });
+    }
+
     // Bouton de recherche au header
     const searchToggleBtn = document.getElementById("search-toggle-btn");
     if (searchToggleBtn) {
@@ -483,6 +602,38 @@ function setupEventListeners() {
             }
         });
     }
+
+    // Bouton Copier le mot de passe WiFi
+    const wifiBtn = document.getElementById("wifi-copy-btn");
+    if (wifiBtn) {
+        wifiBtn.addEventListener("click", () => {
+            const codeEl = document.getElementById("wifi-code");
+            const badgeEl = document.getElementById("wifi-badge");
+            const codeText = codeEl ? codeEl.textContent : "Boscoffee2026";
+
+            navigator.clipboard.writeText(codeText).then(() => {
+                showWifiFeedback(wifiBtn, badgeEl);
+            }).catch(() => {
+                // Fallback pour anciens navigateurs / HTTPS restreint
+                const tempInput = document.createElement("input");
+                tempInput.value = codeText;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+                showWifiFeedback(wifiBtn, badgeEl);
+            });
+        });
+    }
+}
+
+function showWifiFeedback(wifiBtn, badgeEl) {
+    if (wifiBtn) wifiBtn.classList.add("copied");
+    if (badgeEl) badgeEl.textContent = "✓ Copié !";
+    setTimeout(() => {
+        if (wifiBtn) wifiBtn.classList.remove("copied");
+        if (badgeEl) badgeEl.textContent = "Copier";
+    }, 2200);
 }
 
 function clearSearch() {
@@ -507,4 +658,550 @@ function escapeHtml(str) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+// ==========================================================================
+// MODAL FICHE PRODUIT — Zoom & Détails Interactifs
+// ==========================================================================
+
+// Dictionnaire plat de tous les produits pour lookup rapide
+const ALL_ITEMS_MAP = {};
+MENU_DATA.forEach(cat => {
+    cat.items.forEach(item => {
+        ALL_ITEMS_MAP[item.id] = { ...item, _catTitle: cat.title, _catIcon: cat.icon, _catBadge: cat.badge };
+    });
+});
+
+let modalOpenItemId = null;
+
+function openProductModal(itemId) {
+    const item = ALL_ITEMS_MAP[itemId];
+    if (!item) return;
+
+    modalOpenItemId = itemId;
+
+    const overlay = document.getElementById("product-modal-overlay");
+    const modalImg = document.getElementById("modal-img");
+    const modalImgFallback = document.getElementById("modal-img-fallback");
+    const modalImgIcon = document.getElementById("modal-img-icon");
+    const modalImgBadges = document.getElementById("modal-img-badges");
+    const modalName = document.getElementById("modal-product-name");
+    const modalPrice = document.getElementById("modal-price");
+    const modalDesc = document.getElementById("modal-product-desc");
+    const modalMeta = document.getElementById("modal-meta");
+    const modalAddBtn = document.getElementById("modal-add-btn");
+    const modalAddLabel = document.getElementById("modal-add-label");
+
+    if (!overlay) return;
+
+    // Remplir le contenu
+    if (modalName) modalName.textContent = item.name;
+    if (modalPrice) modalPrice.textContent = formatPrice(item.price);
+    if (modalDesc) modalDesc.textContent = item.desc || "";
+
+    // Image
+    if (item.img && modalImg) {
+        modalImg.src = item.img.replace("w=300", "w=700");
+        modalImg.alt = item.name;
+        modalImg.style.display = "block";
+        modalImg.onerror = () => {
+            modalImg.style.display = "none";
+            if (modalImgFallback) { modalImgFallback.removeAttribute("hidden"); }
+            if (modalImgIcon) modalImgIcon.textContent = item.icon || "☕";
+        };
+        if (modalImgFallback) modalImgFallback.setAttribute("hidden", "");
+    } else {
+        if (modalImg) modalImg.style.display = "none";
+        if (modalImgFallback) { modalImgFallback.removeAttribute("hidden"); }
+        if (modalImgIcon) modalImgIcon.textContent = item.icon || "☕";
+    }
+
+    // Badges sur la photo
+    if (modalImgBadges) {
+        let badgesHtml = "";
+        if (item.isSpecialty) badgesHtml += `<span class="modal-badge modal-badge-specialty">⭐ Signature Bosco</span>`;
+        if (item.isSupplement) badgesHtml += `<span class="modal-badge modal-badge-option">➕ Option</span>`;
+        modalImgBadges.innerHTML = badgesHtml;
+    }
+
+    // Meta tags (catégorie, badge)
+    if (modalMeta) {
+        let metaHtml = `<span class="modal-meta-tag tag-category">${item._catIcon} ${item._catTitle}</span>`;
+        if (item._catBadge) metaHtml += `<span class="modal-meta-tag tag-gold">✨ ${item._catBadge}</span>`;
+        if (item.price <= 7) metaHtml += `<span class="modal-meta-tag tag-gold">💚 Petit prix</span>`;
+        if (item.isSpecialty) metaHtml += `<span class="modal-meta-tag tag-gold">👑 Incontournable</span>`;
+        modalMeta.innerHTML = metaHtml;
+    }
+
+    // Bouton Ajouter — vérifier si déjà dans la sélection
+    if (modalAddBtn && modalAddLabel) {
+        const inCart = userSelection.find(i => i.id === itemId);
+        modalAddBtn.classList.toggle("is-added", !!inCart);
+        modalAddLabel.textContent = inCart ? `✓ Dans ma sélection (${inCart.qty})` : "Ajouter à ma sélection";
+        modalAddBtn.onclick = () => {
+            addToSelection(item, 1);
+        };
+    }
+
+    // Afficher le modal
+    overlay.removeAttribute("hidden");
+    document.body.style.overflow = "hidden";
+
+    // Focus pour accessibilité
+    setTimeout(() => {
+        const closeBtn = document.getElementById("modal-close-btn");
+        if (closeBtn) closeBtn.focus();
+    }, 50);
+}
+
+function closeProductModal() {
+    const overlay = document.getElementById("product-modal-overlay");
+    if (!overlay) return;
+    overlay.setAttribute("hidden", "");
+    document.body.style.overflow = "";
+    modalOpenItemId = null;
+}
+
+function setupModalEventListeners() {
+    const overlay = document.getElementById("product-modal-overlay");
+    const closeBtn = document.getElementById("modal-close-btn");
+
+    // Fermer via le bouton X
+    if (closeBtn) {
+        closeBtn.addEventListener("click", closeProductModal);
+    }
+
+    // Fermer en cliquant sur l'overlay (en dehors du modal)
+    if (overlay) {
+        overlay.addEventListener("click", (e) => {
+            if (e.target === overlay) closeProductModal();
+        });
+    }
+
+    // Fermer avec la touche Echap
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modalOpenItemId !== null) {
+            closeProductModal();
+        }
+    });
+
+    // Délégation de clic sur le menu-container (pour les lignes produit)
+    const menuContainer = document.getElementById("menu-container");
+    if (menuContainer) {
+        menuContainer.addEventListener("click", (e) => {
+            // Si le clic provient du bouton (+) d'ajout rapide, laisser son listener s'exécuter
+            if (e.target.closest(".sb-item-quick-add-btn")) {
+                return;
+            }
+            const row = e.target.closest("[data-item-id]");
+            if (row && row.dataset.itemId) {
+                openProductModal(row.dataset.itemId);
+            }
+        });
+
+        // Accessibilité clavier (Enter/Space ouvre le modal)
+        menuContainer.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                if (e.target.closest(".sb-item-quick-add-btn")) return;
+                const row = e.target.closest("[data-item-id]");
+                if (row && row.dataset.itemId) {
+                    e.preventDefault();
+                    openProductModal(row.dataset.itemId);
+                }
+            }
+        });
+    }
+}
+
+// ==========================================================================
+// SIMULATEUR D'ADDITION / PANIER — Logique & Synchronisation
+// ==========================================================================
+
+let userSelection = [];
+
+function loadSelection() {
+    try {
+        const raw = localStorage.getItem("boscoffee_selection");
+        userSelection = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(userSelection)) userSelection = [];
+    } catch (e) {
+        userSelection = [];
+    }
+    updateSelectionUI();
+}
+
+function saveSelection() {
+    localStorage.setItem("boscoffee_selection", JSON.stringify(userSelection));
+    updateSelectionUI();
+}
+
+function addToSelection(item, qty = 1) {
+    if (!item || !item.id) return;
+    const existing = userSelection.find(i => i.id === item.id);
+    if (existing) {
+        existing.qty = (existing.qty || 1) + qty;
+    } else {
+        userSelection.push({
+            id: item.id,
+            name: item.name,
+            price: Number(item.price),
+            icon: item.icon || "☕",
+            qty: qty
+        });
+    }
+    saveSelection();
+    triggerCartAnimation();
+}
+
+function updateSelectionQty(itemId, delta) {
+    const idx = userSelection.findIndex(i => i.id === itemId);
+    if (idx === -1) return;
+
+    userSelection[idx].qty = (userSelection[idx].qty || 1) + delta;
+    if (userSelection[idx].qty <= 0) {
+        userSelection.splice(idx, 1);
+    }
+    saveSelection();
+}
+
+function removeFromSelection(itemId) {
+    userSelection = userSelection.filter(i => i.id !== itemId);
+    saveSelection();
+}
+
+function clearSelection() {
+    userSelection = [];
+    saveSelection();
+}
+
+function getSelectionTotal() {
+    return userSelection.reduce((sum, item) => sum + (Number(item.price) * (item.qty || 1)), 0);
+}
+
+function getSelectionCount() {
+    return userSelection.reduce((count, item) => count + (item.qty || 1), 0);
+}
+
+function getSelectionIds() {
+    return userSelection.map(i => i.id);
+}
+
+function triggerCartAnimation() {
+    const bubble = document.getElementById("cart-bubble");
+    if (bubble) {
+        bubble.classList.remove("pop");
+        void bubble.offsetWidth; // déclenche un reflow pour relancer l'animation
+        bubble.classList.add("pop");
+    }
+}
+
+function updateSelectionUI() {
+    const total = getSelectionTotal();
+    const count = getSelectionCount();
+    const formattedTotal = formatPrice(total) + " DT";
+
+    // 1. Bulle flottante
+    const bubble = document.getElementById("cart-bubble");
+    const bubbleTotal = document.getElementById("cart-bubble-total");
+    const bubbleCount = document.getElementById("cart-bubble-count");
+
+    if (bubble) {
+        if (count > 0) {
+            bubble.removeAttribute("hidden");
+            if (bubbleTotal) bubbleTotal.textContent = formattedTotal;
+            if (bubbleCount) bubbleCount.textContent = count;
+        } else {
+            bubble.setAttribute("hidden", "");
+        }
+    }
+
+    // 2. Tiroir Ma Sélection
+    const drawerTotal = document.getElementById("drawer-total-value");
+    if (drawerTotal) drawerTotal.textContent = formattedTotal;
+
+    const drawerItems = document.getElementById("drawer-items");
+    if (drawerItems) {
+        if (userSelection.length === 0) {
+            drawerItems.innerHTML = `
+                <div class="drawer-empty-state">
+                    <span class="drawer-empty-icon">🛒</span>
+                    <p class="drawer-empty-msg">Votre sélection est vide</p>
+                    <p class="drawer-empty-sub">Touchez le bouton (+) sur un article pour l'ajouter à votre note.</p>
+                </div>
+            `;
+        } else {
+            drawerItems.innerHTML = userSelection.map(item => `
+                <div class="drawer-item-row" data-cart-id="${item.id}">
+                    <span class="drawer-item-emoji">${item.icon || '☕'}</span>
+                    <div class="drawer-item-name">
+                        ${escapeHtml(item.name)}
+                        <span class="drawer-item-unit-price">${formatPrice(item.price)} DT / unité</span>
+                    </div>
+                    <div class="drawer-qty-control">
+                        <button class="drawer-qty-btn" data-action="dec" data-id="${item.id}" aria-label="Diminuer">−</button>
+                        <span class="drawer-qty-num">${item.qty}</span>
+                        <button class="drawer-qty-btn" data-action="inc" data-id="${item.id}" aria-label="Augmenter">+</button>
+                    </div>
+                    <span class="drawer-item-subtotal">${formatPrice(item.price * item.qty)} DT</span>
+                </div>
+            `).join("");
+        }
+    }
+
+    // 3. Vue Serveur
+    const waiterTotal = document.getElementById("waiter-total-value");
+    if (waiterTotal) waiterTotal.textContent = formattedTotal;
+
+    const waiterItems = document.getElementById("waiter-items-list");
+    if (waiterItems) {
+        if (userSelection.length === 0) {
+            waiterItems.innerHTML = `
+                <div class="drawer-empty-state">
+                    <p class="drawer-empty-msg">Aucun article sélectionné</p>
+                </div>
+            `;
+        } else {
+            waiterItems.innerHTML = userSelection.map(item => `
+                <div class="waiter-item-row">
+                    <div class="waiter-item-left">
+                        <span class="waiter-item-qty-badge">${item.qty}x</span>
+                        <span class="waiter-item-name">${escapeHtml(item.name)}</span>
+                    </div>
+                    <span class="waiter-item-subtotal">${formatPrice(item.price * item.qty)} DT</span>
+                </div>
+            `).join("");
+        }
+    }
+
+    // 4. Modal produit (si ouvert)
+    if (modalOpenItemId) {
+        const modalAddBtn = document.getElementById("modal-add-btn");
+        const modalAddLabel = document.getElementById("modal-add-label");
+        const inCartItem = userSelection.find(i => i.id === modalOpenItemId);
+        if (modalAddBtn && modalAddLabel) {
+            if (inCartItem) {
+                modalAddBtn.classList.add("is-added");
+                modalAddLabel.textContent = `✓ Dans ma sélection (${inCartItem.qty})`;
+            } else {
+                modalAddBtn.classList.remove("is-added");
+                modalAddLabel.textContent = "Ajouter à ma sélection";
+            }
+        }
+    }
+}
+
+function openSelectionDrawer() {
+    const overlay = document.getElementById("selection-drawer-overlay");
+    if (overlay) {
+        overlay.removeAttribute("hidden");
+        document.body.style.overflow = "hidden";
+        updateSelectionUI();
+    }
+}
+
+function closeSelectionDrawer() {
+    const overlay = document.getElementById("selection-drawer-overlay");
+    if (overlay) {
+        overlay.setAttribute("hidden", "");
+        const waiter = document.getElementById("waiter-view");
+        if (!waiter || waiter.hasAttribute("hidden")) {
+            document.body.style.overflow = "";
+        }
+    }
+}
+
+function openWaiterView() {
+    closeSelectionDrawer();
+    const waiterView = document.getElementById("waiter-view");
+    if (waiterView) {
+        waiterView.removeAttribute("hidden");
+        document.body.style.overflow = "hidden";
+        updateSelectionUI();
+    }
+}
+
+function closeWaiterView() {
+    const waiterView = document.getElementById("waiter-view");
+    if (waiterView) {
+        waiterView.setAttribute("hidden", "");
+        document.body.style.overflow = "";
+    }
+}
+
+function setupCartEventListeners() {
+    // Clic sur la bulle flottante → ouvre le tiroir
+    const bubbleBtn = document.getElementById("cart-bubble-btn");
+    if (bubbleBtn) {
+        bubbleBtn.addEventListener("click", openSelectionDrawer);
+    }
+
+    // Fermeture du tiroir
+    const drawerCloseBtn = document.getElementById("drawer-close-btn");
+    if (drawerCloseBtn) {
+        drawerCloseBtn.addEventListener("click", closeSelectionDrawer);
+    }
+
+    const drawerOverlay = document.getElementById("selection-drawer-overlay");
+    if (drawerOverlay) {
+        drawerOverlay.addEventListener("click", (e) => {
+            if (e.target === drawerOverlay) closeSelectionDrawer();
+        });
+    }
+
+    // Actions +/- dans le tiroir (délégation d'événements)
+    const drawerItems = document.getElementById("drawer-items");
+    if (drawerItems) {
+        drawerItems.addEventListener("click", (e) => {
+            const btn = e.target.closest(".drawer-qty-btn");
+            if (!btn) return;
+            const action = btn.dataset.action;
+            const id = btn.dataset.id;
+            if (action === "inc") {
+                updateSelectionQty(id, 1);
+            } else if (action === "dec") {
+                updateSelectionQty(id, -1);
+            }
+        });
+    }
+
+    // Vider la sélection
+    const clearBtn = document.getElementById("drawer-clear-btn");
+    if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+            if (userSelection.length > 0 && confirm("Voulez-vous vider toute votre sélection ?")) {
+                clearSelection();
+            }
+        });
+    }
+
+    // Présenter au serveur
+    const presentBtn = document.getElementById("drawer-present-btn");
+    if (presentBtn) {
+        presentBtn.addEventListener("click", openWaiterView);
+    }
+
+    // Retour depuis la vue serveur
+    const waiterBackBtn = document.getElementById("waiter-back-btn");
+    if (waiterBackBtn) {
+        waiterBackBtn.addEventListener("click", () => {
+            closeWaiterView();
+            openSelectionDrawer();
+        });
+    }
+
+    // Touche Échap pour fermer vue serveur ou tiroir
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            const waiter = document.getElementById("waiter-view");
+            if (waiter && !waiter.hasAttribute("hidden")) {
+                closeWaiterView();
+                return;
+            }
+            const drawer = document.getElementById("selection-drawer-overlay");
+            if (drawer && !drawer.hasAttribute("hidden")) {
+                closeSelectionDrawer();
+            }
+        }
+    });
+
+    // Délégation de clic pour le bouton d'ajout rapide (+) sur les cartes du menu
+    const menuContainer = document.getElementById("menu-container");
+    if (menuContainer) {
+        menuContainer.addEventListener("click", (e) => {
+            const addBtn = e.target.closest(".sb-item-quick-add-btn");
+            if (addBtn && addBtn.dataset.addId) {
+                e.stopPropagation();
+                const item = ALL_ITEMS_MAP[addBtn.dataset.addId];
+                if (item) {
+                    addToSelection(item, 1);
+                }
+            }
+        });
+    }
+}
+
+// ==========================================================================
+// LIGHTBOX — Agrandissement Photo Plein Écran
+// ==========================================================================
+
+function openLightbox(src, alt) {
+    const lightbox = document.getElementById("photo-lightbox");
+    const img = document.getElementById("lightbox-img");
+    const caption = document.getElementById("lightbox-caption");
+
+    if (!lightbox || !src) return;
+
+    if (img) {
+        img.src = src.replace("w=700", "w=1400").replace("w=300", "w=1400");
+        img.alt = alt || "";
+    }
+    if (caption) caption.textContent = alt || "";
+
+    lightbox.removeAttribute("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById("photo-lightbox");
+    if (!lightbox) return;
+    lightbox.setAttribute("hidden", "");
+    // Ne pas restaurer overflow ici — le modal produit le gère lui-même
+    // Vérifier si le modal est encore ouvert
+    const overlay = document.getElementById("product-modal-overlay");
+    if (!overlay || overlay.hasAttribute("hidden")) {
+        document.body.style.overflow = "";
+    }
+}
+
+function setupLightboxListeners() {
+    const lightbox = document.getElementById("photo-lightbox");
+    const lightboxCloseBtn = document.getElementById("lightbox-close-btn");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const modalZoomBtn = document.getElementById("modal-zoom-btn");
+    const modalImg = document.getElementById("modal-img");
+
+    // Bouton zoom dans le modal → ouvre lightbox
+    if (modalZoomBtn) {
+        modalZoomBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const src = modalImg ? modalImg.src : "";
+            const alt = modalImg ? modalImg.alt : "";
+            if (src) openLightbox(src, alt);
+        });
+    }
+
+    // Clic sur la photo dans le modal → ouvre aussi la lightbox
+    if (modalImg) {
+        modalImg.addEventListener("click", () => {
+            if (modalImg.src) openLightbox(modalImg.src, modalImg.alt);
+        });
+    }
+
+    // Fermer lightbox avec le bouton ✕
+    if (lightboxCloseBtn) {
+        lightboxCloseBtn.addEventListener("click", closeLightbox);
+    }
+
+    // Clic sur la photo en lightbox → ferme (zoom-out)
+    if (lightboxImg) {
+        lightboxImg.addEventListener("click", closeLightbox);
+    }
+
+    // Clic sur le fond noir → ferme
+    if (lightbox) {
+        lightbox.addEventListener("click", (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+    }
+
+    // Touche Échap → ferme la lightbox en priorité
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            const lb = document.getElementById("photo-lightbox");
+            if (lb && !lb.hasAttribute("hidden")) {
+                e.stopImmediatePropagation();
+                closeLightbox();
+            }
+        }
+    }, true); // capture phase pour intercepter avant le handler du modal
 }

@@ -31,6 +31,10 @@
         </div>
 
         <div class="header-actions">
+            <button id="theme-toggle-btn" class="icon-btn theme-toggle-btn" aria-label="Basculer en Mode Terrasse (Plein Soleil)" title="Mode Terrasse (Plein Soleil)">
+                <span class="theme-icon" aria-hidden="true">☀️</span>
+                <span class="theme-label-badge">Terrasse</span>
+            </button>
             <button id="search-toggle-btn" class="icon-btn" aria-label="Rechercher" title="Rechercher">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
@@ -40,7 +44,18 @@
         </div>
     </header>
 
-    <!-- Zone de recherche instantanée -->
+    <!-- Bandeau Pratique Client (WiFi 1-clic & Statut Lounge) -->
+    <div class="lounge-info-strip">
+        <div class="info-strip-pill status-pill">
+            <span class="status-pulse-dot"></span>
+            <span>🟢 Ouvert • 07h00 - 00h00</span>
+        </div>
+        <button class="info-strip-pill wifi-pill" id="wifi-copy-btn" title="Toucher pour copier le mot de passe WiFi">
+            <span class="wifi-icon">📶</span>
+            <span>WiFi: <strong id="wifi-code">Boscoffee2026</strong></span>
+            <span class="wifi-copy-badge" id="wifi-badge">Copier</span>
+        </button>
+    </div>
     <div class="search-section" id="search-section">
         <div class="search-input-box">
             <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -68,6 +83,38 @@
         </div>
     </div>
 
+    <!-- Barre d'outils d'affichage (Statistiques & Bascule Grille / Liste) -->
+    <div class="menu-toolbar-wrapper">
+        <div class="menu-toolbar">
+            <div class="toolbar-stats">
+                <span class="toolbar-pulse"></span>
+                <span id="toolbar-count-text">88 délices au menu</span>
+            </div>
+            <div class="view-mode-toggle" role="group" aria-label="Mode d'affichage">
+                <button id="view-list-btn" class="view-btn active" data-view="list" aria-label="Vue Liste Starbucks" title="Vue Liste (Style Starbucks)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                    <span>Liste</span>
+                </button>
+                <button id="view-grid-btn" class="view-btn" data-view="grid" aria-label="Vue Grille Photos" title="Vue Grille (Grandes Photos)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                        <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                        <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                        <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+                    </svg>
+                    <span>Grille</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Conteneur Principal du Menu -->
     <main class="menu-container" id="menu-container">
         <!-- Rendu dynamique des sections par script.js -->
@@ -87,6 +134,159 @@
             © 2026 Boscoffee. Menu Digital officiel par QR Code.
         </div>
     </footer>
+
+    <!-- =====================================================
+         MODAL FICHE PRODUIT (Zoom & Détails Interactifs)
+         ===================================================== -->
+    <div class="product-modal-overlay" id="product-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-product-name" hidden>
+        <div class="product-modal">
+            <!-- Bouton Fermer -->
+            <button class="modal-close-btn" id="modal-close-btn" aria-label="Fermer la fiche produit">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <!-- Photo Plein Format -->
+            <div class="modal-img-wrapper" id="modal-img-wrapper">
+                <img class="modal-img" id="modal-img" src="" alt="" loading="lazy">
+                <div class="modal-img-fallback" id="modal-img-fallback" hidden>
+                    <span id="modal-img-icon">☕</span>
+                </div>
+                <!-- Bouton Agrandir Photo -->
+                <button class="modal-zoom-btn" id="modal-zoom-btn" aria-label="Agrandir la photo" title="Agrandir la photo">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <polyline points="9 21 3 21 3 15"></polyline>
+                        <line x1="21" y1="3" x2="14" y2="10"></line>
+                        <line x1="3" y1="21" x2="10" y2="14"></line>
+                    </svg>
+                </button>
+                <!-- Badges superposés sur la photo -->
+                <div class="modal-img-badges" id="modal-img-badges"></div>
+            </div>
+
+            <!-- Contenu texte -->
+            <div class="modal-body">
+                <div class="modal-header-row">
+                    <h2 class="modal-product-name" id="modal-product-name"></h2>
+                    <div class="modal-price-badge">
+                        <span class="modal-price" id="modal-price"></span>
+                        <span class="modal-currency">DT</span>
+                    </div>
+                </div>
+
+                <p class="modal-product-desc" id="modal-product-desc"></p>
+
+                <div class="modal-meta" id="modal-meta"></div>
+
+                <!-- CTA Button -->
+                <button class="modal-add-btn" id="modal-add-btn">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span id="modal-add-label">Ajouter à ma sélection</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         LIGHTBOX PHOTO PLEIN ÉCRAN
+         ===================================================== -->
+    <div class="photo-lightbox" id="photo-lightbox" hidden>
+        <button class="lightbox-close-btn" id="lightbox-close-btn" aria-label="Fermer">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <img class="lightbox-img" id="lightbox-img" src="" alt="">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+
+    <!-- =====================================================
+         BULLE FLOTTANTE — SIMULATEUR D'ADDITION
+         ===================================================== -->
+    <div class="cart-bubble" id="cart-bubble" hidden>
+        <button class="cart-bubble-btn" id="cart-bubble-btn" aria-label="Voir ma sélection">
+            <span class="cart-bubble-icon">🛒</span>
+            <div class="cart-bubble-info">
+                <span class="cart-bubble-label">Ma Sélection</span>
+                <span class="cart-bubble-total" id="cart-bubble-total">0.000 DT</span>
+            </div>
+            <span class="cart-bubble-count" id="cart-bubble-count">0</span>
+        </button>
+    </div>
+
+    <!-- =====================================================
+         TIROIR DE SÉLECTION (ADDITION DÉTAILLÉE)
+         ===================================================== -->
+    <div class="selection-drawer-overlay" id="selection-drawer-overlay" hidden>
+        <div class="selection-drawer" id="selection-drawer">
+            <div class="drawer-handle-bar"></div>
+            <div class="drawer-header">
+                <h3 class="drawer-title">Ma Sélection</h3>
+                <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Fermer">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="drawer-items" id="drawer-items">
+                <!-- Rendu dynamique par JS -->
+            </div>
+            <div class="drawer-footer">
+                <div class="drawer-total-row">
+                    <span class="drawer-total-label">Total</span>
+                    <span class="drawer-total-value" id="drawer-total-value">0.000 DT</span>
+                </div>
+                <button class="drawer-present-btn" id="drawer-present-btn">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                    Présenter au serveur
+                </button>
+                <button class="drawer-clear-btn" id="drawer-clear-btn">
+                    Vider la sélection
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         VUE "PRÉSENTER AU SERVEUR" (RÉCAPITULATIF PLEIN ÉCRAN)
+         ===================================================== -->
+    <div class="waiter-view" id="waiter-view" hidden>
+        <div class="waiter-header">
+            <button class="waiter-back-btn" id="waiter-back-btn" aria-label="Retour">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Retour
+            </button>
+            <span class="waiter-header-title">Récapitulatif de Commande</span>
+        </div>
+        <div class="waiter-brand">
+            <span class="waiter-logo">Boscoffee</span>
+            <p class="waiter-tagline">Coffee & Lounge</p>
+        </div>
+        <div class="waiter-items-list" id="waiter-items-list">
+            <!-- Rendu dynamique par JS -->
+        </div>
+        <div class="waiter-total-section">
+            <div class="waiter-total-row">
+                <span>Total à régler</span>
+                <span class="waiter-total-value" id="waiter-total-value">0.000 DT</span>
+            </div>
+            <p class="waiter-note">Merci de montrer cet écran au serveur.</p>
+        </div>
+    </div>
 
     <!-- Script Logique & Données -->
     <script src="script.js"></script>
