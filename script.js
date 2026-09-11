@@ -356,45 +356,36 @@ function getTotalProductsCount() {
     return MENU_DATA.reduce((acc, cat) => acc + cat.items.length, 0);
 }
 
-// Sélection d'une catégorie
+// Sélection d'une catégorie : défilement fluide sans masquer les autres catégories (Style Café Victor Hugo)
+let isManualScrolling = false;
+
 function selectCategory(catId) {
     activeCategoryId = catId;
+    isManualScrolling = true;
 
-    // Mise à jour visuelle des boutons
-    document.querySelectorAll(".cat-pill").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.catId === catId);
-    });
+    // Mise à jour visuelle des boutons pastilles
+    updateActiveCategoryPill(catId);
 
-    // Centrer le bouton sélectionné dans la barre de défilement
-    const activeBtn = document.querySelector(`.cat-pill[data-cat-id="${catId}"]`);
-    if (activeBtn) {
-        activeBtn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-    }
-
-    renderMenu();
-
-    // Défilement automatique vers la section choisie
-    if (catId !== "all") {
+    if (catId === "all") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setTimeout(() => { isManualScrolling = false; }, 800);
+    } else {
         const sectionEl = document.getElementById(`section-${catId}`);
         if (sectionEl) {
             sectionEl.scrollIntoView({ behavior: "smooth", block: "start" });
         }
+        setTimeout(() => { isManualScrolling = false; }, 800);
     }
 }
 
-// Filtrage par macro-groupe (Tous, Chaud, Frais, Sucré, Salé)
-function setMacroGroup(group) {
-    activeGroup = group;
-    document.querySelectorAll(".macro-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.group === group);
-    });
-
-    activeCategoryId = "all";
+function updateActiveCategoryPill(catId) {
     document.querySelectorAll(".cat-pill").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.catId === "all");
+        const isActive = btn.dataset.catId === catId;
+        btn.classList.toggle("active", isActive);
+        if (isActive) {
+            btn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        }
     });
-
-    renderMenu();
 }
 
 // Rendu principal des rubriques et produits
@@ -402,21 +393,12 @@ function renderMenu() {
     const container = document.getElementById("menu-container");
     if (!container) return;
 
-    let filteredCategories = MENU_DATA;
-
-    if (activeGroup !== "all") {
-        filteredCategories = filteredCategories.filter(cat => cat.group === activeGroup);
-    }
-
-    if (activeCategoryId !== "all") {
-        filteredCategories = filteredCategories.filter(cat => cat.id === activeCategoryId);
-    }
-
+    // Toutes les catégories sont toujours affichées (Style Café Victor Hugo)
     const query = searchQuery.trim().toLowerCase();
     let sectionsHtml = "";
     let totalMatched = 0;
 
-    filteredCategories.forEach(cat => {
+    MENU_DATA.forEach(cat => {
         const matchingItems = cat.items.filter(item => {
             if (!query) return true;
             return (
@@ -437,11 +419,6 @@ function renderMenu() {
     if (countEl) {
         if (query) {
             countEl.textContent = `${totalMatched} résultat${totalMatched > 1 ? 's' : ''} trouvé${totalMatched > 1 ? 's' : ''}`;
-        } else if (activeCategoryId !== "all") {
-            const currentCat = MENU_DATA.find(c => c.id === activeCategoryId);
-            countEl.textContent = `${totalMatched} choix dans ${currentCat ? currentCat.title : ''}`;
-        } else if (activeGroup !== "all") {
-            countEl.textContent = `${totalMatched} choix sélectionnés`;
         } else {
             countEl.textContent = `${totalMatched} délices au menu`;
         }
@@ -457,9 +434,9 @@ function renderMenu() {
             </div>
         `;
     } else {
-        // Mode Victor Hugo : afficher la grille des catégories si 'Tout le Menu' est sélectionné et sans recherche
+        // Mode Victor Hugo : Grille d'aperçu en haut + Tous les produits ci-dessous
         let overviewHtml = "";
-        if (activeCategoryId === "all" && activeGroup === "all" && !query) {
+        if (!query) {
             overviewHtml = renderCategoryGridOverview();
         }
         container.innerHTML = overviewHtml + sectionsHtml;
@@ -581,13 +558,6 @@ function renderStarbucksStyleRow(item) {
 
 // Configuration des événements généraux
 function setupEventListeners() {
-    // Boutons Macro-groupes
-    document.querySelectorAll(".macro-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            setMacroGroup(btn.dataset.group);
-        });
-    });
-
     // Barre de recherche
     const searchInput = document.getElementById("search-input");
     const clearBtn = document.getElementById("clear-search-btn");
@@ -647,7 +617,7 @@ function setupEventListeners() {
     const scrollTopBtn = document.getElementById("scroll-top-btn");
     if (scrollTopBtn) {
         window.addEventListener("scroll", () => {
-            if (window.scrollY > 300) {
+            if (window.scrollY > 200) {
                 scrollTopBtn.removeAttribute("hidden");
                 scrollTopBtn.classList.add("visible");
             } else {
@@ -660,6 +630,31 @@ function setupEventListeners() {
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
     }
+
+    // ScrollSpy : Mise à jour automatique de la pastille active lors du défilement (Style Café Victor Hugo)
+    window.addEventListener("scroll", () => {
+        if (isManualScrolling) return;
+
+        const sections = document.querySelectorAll(".category-section");
+        let currentCatId = "all";
+
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            // Détecte la section actuellement visible sous la barre fixe sticky
+            if (rect.top <= 190 && rect.bottom >= 100) {
+                currentCatId = section.dataset.category || "all";
+            }
+        });
+
+        if (window.scrollY < 250) {
+            currentCatId = "all";
+        }
+
+        if (activeCategoryId !== currentCatId) {
+            activeCategoryId = currentCatId;
+            updateActiveCategoryPill(currentCatId);
+        }
+    });
 
     // Bouton Copier le mot de passe WiFi
     const wifiBtn = document.getElementById("wifi-copy-btn");
