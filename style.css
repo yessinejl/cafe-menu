@@ -72,6 +72,10 @@ body.terrasse-mode .ambient-glow {
     opacity: 0.03;
 }
 
+body.terrasse-mode .header {
+    background: rgba(245, 244, 239, 0.94);
+    border-bottom: 1px solid rgba(166, 124, 0, 0.2);
+}
 
 body.terrasse-mode .bean-icon::after {
     background: #f5f4ef;
@@ -241,141 +245,141 @@ body {
 }
 
 /* ==========================================================================
-   HERO BANNER — STYLE CAFÉ VICTOR HUGO (digitalmenu.tn)
+   HEADER & MARQUE BOSCOFFEE
    ========================================================================== */
 
-.hero-header {
-    position: relative;
-    width: 100%;
-    z-index: 10;
-}
-
-/* Bannière hero pleine largeur avec background-image */
-.hero-banner {
-    position: relative;
-    width: 100%;
-    height: 210px;
-    background-image: url('images/boscoffee-hero.png');
-    background-size: cover;
-    background-position: center center;
-    background-color: #f0ebe3;
-}
-
-/* Overlay dégradé sombre via ::after */
-.hero-banner::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.10) 0%,
-        rgba(0, 0, 0, 0.30) 50%,
-        rgba(0, 0, 0, 0.72) 100%
-    );
-    pointer-events: none;
-    z-index: 0;
-}
-
-@media (max-width: 480px) {
-    .hero-banner { height: 175px; }
-}
-
-/* Zone infos établissement — bas gauche */
-.hero-info {
-    position: absolute;
-    bottom: 14px;
-    left: 14px;
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
     display: flex;
     align-items: center;
-    gap: 10px;
-    z-index: 1;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: rgba(12, 13, 17, 0.92);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
 }
 
-.hero-logo-circle {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.35);
-    border: 2px solid rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(6px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
-}
-
-.hero-logo-initial {
-    font-family: var(--font-serif);
-    font-size: 22px;
-    font-weight: 700;
-    color: #ffffff;
-    line-height: 1;
-}
-
-.hero-text {
+.brand-container {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+}
+
+.logo-wrapper {
+    display: flex;
+    align-items: center;
     gap: 2px;
 }
 
-.hero-title {
+.logo-text {
     font-family: var(--font-serif);
-    font-size: 20px;
+    font-size: 27px;
     font-weight: 700;
-    color: #ffffff;
-    margin: 0;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-    line-height: 1.1;
+    letter-spacing: -0.5px;
+    color: var(--text-pure);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
 }
 
-.hero-subtitle {
-    font-size: 11px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.85);
-    letter-spacing: 0.3px;
-    margin: 0;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+/* Grain de café incrusté dans le "o" */
+.bean-icon {
+    display: inline-block;
+    width: 17px;
+    height: 22px;
+    margin: 0 1.5px;
+    background: var(--gold-gradient);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    position: relative;
+    transform: rotate(18deg);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
 }
 
-/* Boutons action flottants — haut droite */
-.hero-actions {
+.bean-icon::after {
+    content: "";
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 2px;
+    left: 7.5px;
+    width: 2px;
+    height: 18px;
+    background: #0c0d11;
+    border-radius: 50%;
+    transform: rotate(5deg);
+}
+
+.brand-subtitle {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2.2px;
+    color: var(--gold-primary);
+    text-transform: uppercase;
+    margin-top: -1px;
+}
+
+.header-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
-    z-index: 1;
+    gap: 10px;
 }
 
-.hero-icon-btn {
-    width: 38px;
+.theme-toggle-btn {
+    width: auto;
+    padding: 0 13px;
     height: 38px;
+    border-radius: var(--radius-pill);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid rgba(212, 175, 55, 0.32);
+    color: var(--gold-light);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    user-select: none;
+}
+
+.theme-toggle-btn:hover, .theme-toggle-btn:active {
+    background: rgba(212, 175, 55, 0.24);
+    border-color: var(--gold-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 0 12px var(--gold-glow);
+}
+
+.theme-icon {
+    font-size: 15px;
+    line-height: 1;
+}
+
+.theme-label-badge {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.icon-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.92);
-    border: none;
-    color: #1a1d24;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: var(--transition);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.35);
-    font-size: 16px;
 }
 
-.hero-icon-btn:hover,
-.hero-icon-btn:active {
-    background: #ffffff;
-    transform: scale(1.07);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.45);
-}
-
-/* Mode Terrasse */
-body.terrasse-mode .hero-icon-btn {
-    background: rgba(255, 255, 255, 0.95);
-    color: #1a1d24;
+.icon-btn:hover, .icon-btn:active {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: var(--gold-border);
+    color: var(--gold-bright);
 }
 
 /* ==========================================================================
@@ -622,21 +626,17 @@ body.terrasse-mode .status-pill {
     background: var(--bg-surface);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--text-secondary);
-    padding: 7px 15px;
+    padding: 8px 16px;
     border-radius: var(--radius-pill);
     font-size: 13.5px;
     font-weight: 500;
     white-space: nowrap;
     cursor: pointer;
     transition: var(--transition);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 7px;
+    justify-content: center;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-.cat-pill .cat-icon {
-    font-size: 15px;
 }
 
 .cat-pill:hover {

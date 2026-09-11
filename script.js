@@ -327,7 +327,6 @@ function renderCategoriesBar() {
 
     let html = `
         <button class="cat-pill ${activeCategoryId === 'all' ? 'active' : ''}" data-cat-id="all">
-            <span class="cat-icon">📋</span>
             <span class="cat-title">Tous (${getTotalProductsCount()})</span>
         </button>
     `;
@@ -335,7 +334,6 @@ function renderCategoriesBar() {
     MENU_DATA.forEach(cat => {
         html += `
             <button class="cat-pill ${activeCategoryId === cat.id ? 'active' : ''}" data-cat-id="${cat.id}">
-                <span class="cat-icon">${cat.icon}</span>
                 <span class="cat-title">${cat.title}</span>
             </button>
         `;
@@ -451,11 +449,10 @@ function renderCategoryGridOverview() {
         return `
             <div class="cat-overview-card" onclick="selectCategory('${cat.id}')" role="button" tabindex="0" aria-label="Voir la catégorie ${escapeHtml(cat.title)}">
                 <div class="cat-overview-img-wrapper">
-                    ${imgUrl ? `<img class="cat-overview-img" src="${imgUrl}" alt="${escapeHtml(cat.title)}" loading="lazy">` : `<span class="cat-overview-emoji">${cat.icon}</span>`}
+                    ${imgUrl ? `<img class="cat-overview-img" src="${imgUrl}" alt="${escapeHtml(cat.title)}" loading="lazy">` : ``}
                     <span class="cat-overview-count">${cat.items.length} choix</span>
                 </div>
                 <div class="cat-overview-body">
-                    <span class="cat-overview-icon">${cat.icon}</span>
                     <span class="cat-overview-title">${escapeHtml(cat.title)}</span>
                 </div>
             </div>
@@ -466,7 +463,6 @@ function renderCategoryGridOverview() {
         <div class="categories-overview-block">
             <div class="overview-section-header">
                 <div class="overview-title-wrap">
-                    <span class="overview-sparkle">✨</span>
                     <h3 class="overview-main-title">Aperçu du Menu par Catégories</h3>
                 </div>
                 <p class="overview-subtitle">Toucher une catégorie pour y accéder rapidement</p>
@@ -487,7 +483,6 @@ function renderCategorySection(cat, items) {
             <div class="category-header">
                 <div class="category-title-box">
                     <div class="category-title-row">
-                        <span class="cat-icon-lg" aria-hidden="true">${cat.icon}</span>
                         <h2 class="category-main-title">${escapeHtml(cat.title)}</h2>
                     </div>
                     <div class="category-desc-line">
@@ -772,17 +767,17 @@ function openProductModal(itemId) {
     // Badges sur la photo
     if (modalImgBadges) {
         let badgesHtml = "";
-        if (item.isSpecialty) badgesHtml += `<span class="modal-badge modal-badge-specialty">⭐ Signature Bosco</span>`;
-        if (item.isSupplement) badgesHtml += `<span class="modal-badge modal-badge-option">➕ Option</span>`;
+        if (item.isSpecialty) badgesHtml += `<span class="modal-badge modal-badge-specialty">Signature Bosco</span>`;
+        if (item.isSupplement) badgesHtml += `<span class="modal-badge modal-badge-option">Option</span>`;
         modalImgBadges.innerHTML = badgesHtml;
     }
 
     // Meta tags (catégorie, badge)
     if (modalMeta) {
-        let metaHtml = `<span class="modal-meta-tag tag-category">${item._catIcon} ${item._catTitle}</span>`;
-        if (item._catBadge) metaHtml += `<span class="modal-meta-tag tag-gold">✨ ${item._catBadge}</span>`;
-        if (item.price <= 7) metaHtml += `<span class="modal-meta-tag tag-gold">💚 Petit prix</span>`;
-        if (item.isSpecialty) metaHtml += `<span class="modal-meta-tag tag-gold">👑 Incontournable</span>`;
+        let metaHtml = `<span class="modal-meta-tag tag-category">${item._catTitle}</span>`;
+        if (item._catBadge) metaHtml += `<span class="modal-meta-tag tag-gold">${item._catBadge}</span>`;
+        if (item.price <= 7) metaHtml += `<span class="modal-meta-tag tag-gold">Petit prix</span>`;
+        if (item.isSpecialty) metaHtml += `<span class="modal-meta-tag tag-gold">Incontournable</span>`;
         modalMeta.innerHTML = metaHtml;
     }
 
