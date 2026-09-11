@@ -2633,45 +2633,48 @@ body.terrasse-mode .overview-section-header {
     content: "";
     position: absolute;
     top: 0;
-    left: -140%;
-    width: 70%;
+    left: -150%;
+    width: 75%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), rgba(212, 175, 55, 0.45), transparent);
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.7) 35%, rgba(212, 175, 55, 0.75) 65%, transparent 100%);
     transform: skewX(-25deg);
-    animation: cat-card-shimmer 4.5s ease-in-out infinite;
+    animation: cat-card-shimmer 3.6s ease-in-out infinite;
     pointer-events: none;
-    z-index: 5;
+    z-index: 10;
 }
 
 @keyframes cat-card-shimmer {
-    0%, 65% {
-        left: -140%;
+    0% {
+        left: -150%;
+    }
+    65% {
+        left: 230%;
     }
     100% {
-        left: 220%;
+        left: 230%;
     }
 }
 
 .cat-overview-card:hover {
     transform: translateY(-3px) scale(1.02);
-    border-color: rgba(212, 175, 55, 0.5);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(212, 175, 55, 0.2);
+    border-color: rgba(212, 175, 55, 0.6);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12), 0 0 16px rgba(212, 175, 55, 0.35);
 }
 
 body.terrasse-mode .cat-overview-card {
     background: #ffffff;
-    border-color: rgba(0, 0, 0, 0.08);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    border-color: rgba(0, 0, 0, 0.09);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
 }
 
 body.terrasse-mode .cat-overview-card::after {
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), rgba(166, 124, 0, 0.35), transparent);
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.8) 35%, rgba(212, 175, 55, 0.8) 65%, transparent 100%);
 }
 
 body.terrasse-mode .cat-overview-card:hover {
     background: #fffdf8;
-    border-color: rgba(166, 124, 0, 0.4);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    border-color: #d4af37;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), 0 0 14px rgba(212, 175, 55, 0.35);
 }
 
 .cat-overview-img-wrapper {
@@ -2795,4 +2798,510 @@ body:not(.terrasse-mode) .scroll-top-btn:hover {
     border-color: var(--gold-primary);
     color: var(--gold-bright);
     box-shadow: 0 6px 22px rgba(212, 175, 55, 0.35);
+}
+
+/* =====================================================
+   ÉCRAN D'ACCUEIL IMMERSIF BARISTA (Au Scan du QR Code)
+   Thème Prestige Barista & Slogan d'Excellence
+   ===================================================== */
+.barista-intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #0c0805;
+    transition: opacity 0.85s cubic-bezier(0.25, 1, 0.5, 1), transform 0.85s cubic-bezier(0.25, 1, 0.5, 1), filter 0.85s ease, visibility 0.85s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.barista-intro-screen.fade-out {
+    opacity: 0;
+    transform: scale(1.04);
+    filter: blur(4px);
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Conteneur Média & Vidéo Barista */
+.intro-media-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #2b1a10 0%, #120b06 60%, #060402 100%);
+}
+
+.intro-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+    filter: brightness(0.72) contrast(1.18) saturate(1.15);
+    transform: scale(1.05);
+    animation: baristaKenBurns 18s ease-in-out infinite alternate;
+}
+
+@keyframes baristaKenBurns {
+    0% {
+        transform: scale(1.04) translate(0, 0);
+    }
+    50% {
+        transform: scale(1.1) translate(-1%, -1.5%);
+    }
+    100% {
+        transform: scale(1.06) translate(1%, 0.5%);
+    }
+}
+
+/* Gradient Vignette Cinématographique */
+.intro-gradient-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center 40%, rgba(20, 14, 9, 0.25) 0%, rgba(13, 9, 6, 0.72) 65%, rgba(8, 5, 3, 0.95) 100%),
+                linear-gradient(180deg, rgba(8, 5, 3, 0.85) 0%, rgba(15, 10, 7, 0.2) 30%, rgba(15, 10, 7, 0.2) 58%, rgba(8, 5, 3, 0.96) 100%);
+    pointer-events: none;
+}
+
+/* Vapeur Réaliste Animée (Steam Wisps) */
+.intro-steam-overlay {
+    position: absolute;
+    bottom: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    height: 320px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.steam-particle {
+    position: absolute;
+    bottom: 0;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(255, 240, 220, 0.45) 0%, rgba(212, 175, 55, 0.15) 45%, rgba(255, 255, 255, 0) 75%);
+    filter: blur(16px);
+    opacity: 0;
+    animation: steamRise 4.2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+}
+
+.steam-particle.s1 {
+    width: 75px;
+    height: 115px;
+    left: 42%;
+    animation-delay: 0s;
+    animation-duration: 3.8s;
+}
+
+.steam-particle.s2 {
+    width: 95px;
+    height: 145px;
+    left: 26%;
+    animation-delay: 1.1s;
+    animation-duration: 4.4s;
+}
+
+.steam-particle.s3 {
+    width: 85px;
+    height: 135px;
+    left: 54%;
+    animation-delay: 2s;
+    animation-duration: 4.1s;
+}
+
+.steam-particle.s4 {
+    width: 105px;
+    height: 155px;
+    left: 36%;
+    animation-delay: 2.9s;
+    animation-duration: 4.6s;
+}
+
+@keyframes steamRise {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.6) rotate(0deg);
+    }
+    25% {
+        opacity: 0.55;
+    }
+    60% {
+        opacity: 0.35;
+        transform: translateY(-90px) scale(1.25) rotate(15deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-220px) scale(1.8) rotate(-20deg);
+    }
+}
+
+/* Particules Dorées & Grains Flottants */
+.intro-particles-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.intro-particle {
+    position: absolute;
+    color: var(--gold-primary, #d4af37);
+    font-size: 0.95rem;
+    opacity: 0;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.7));
+    animation: particleFloat 6s ease-in-out infinite;
+}
+
+.intro-particle.p1 {
+    top: 22%;
+    left: 18%;
+    font-size: 0.85rem;
+    animation-delay: 0.3s;
+    animation-duration: 5.5s;
+}
+
+.intro-particle.p2 {
+    top: 58%;
+    left: 82%;
+    font-size: 1.15rem;
+    opacity: 0.7;
+    animation-delay: 1.4s;
+    animation-duration: 6.2s;
+}
+
+.intro-particle.p3 {
+    top: 70%;
+    left: 14%;
+    font-size: 0.8rem;
+    animation-delay: 2.5s;
+    animation-duration: 5s;
+}
+
+.intro-particle.p4 {
+    top: 28%;
+    left: 80%;
+    font-size: 0.95rem;
+    animation-delay: 3.8s;
+    animation-duration: 6.5s;
+}
+
+@keyframes particleFloat {
+    0% {
+        opacity: 0;
+        transform: translateY(15px) scale(0.8);
+    }
+    30% {
+        opacity: 0.85;
+        transform: translateY(0) scale(1.1);
+    }
+    70% {
+        opacity: 0.6;
+        transform: translateY(-25px) scale(0.95);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.7);
+    }
+}
+
+/* Bouton Passer (Discret, verre givré en haut à droite) */
+.intro-skip-btn {
+    position: absolute;
+    top: max(20px, env(safe-area-inset-top, 20px));
+    right: max(20px, env(safe-area-inset-right, 20px));
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(22, 16, 12, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(212, 175, 55, 0.38);
+    border-radius: 999px;
+    color: #f1ebd8;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.intro-skip-btn:hover {
+    background: rgba(38, 28, 20, 0.9);
+    border-color: var(--gold-primary, #d4af37);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+}
+
+/* Contenu Central Prestige */
+.intro-content {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 24px;
+    max-width: 540px;
+    width: 100%;
+    margin-top: auto;
+    margin-bottom: max(36px, env(safe-area-inset-bottom, 36px));
+    animation: introFadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes introFadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Brand Badge Prestige */
+.intro-brand-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 18px;
+}
+
+.intro-bean-glow {
+    font-size: 2rem;
+    display: inline-block;
+    filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.85));
+    animation: beanGlowPulse 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes beanGlowPulse {
+    0% {
+        transform: scale(0.95);
+        filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
+    }
+    100% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 26px rgba(230, 195, 92, 0.95));
+    }
+}
+
+.intro-brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    background: linear-gradient(135deg, #ffffff 15%, #f7e7c4 50%, #d4af37 85%, #b38728 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 3px 14px rgba(0, 0, 0, 0.85));
+    line-height: 1.1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+}
+
+.intro-brand-name .bean-icon {
+    display: inline-block;
+    width: 21px;
+    height: 25px;
+    background: radial-gradient(circle at 35% 35%, #f5d77f, #b38728);
+    border-radius: 50% 50% 45% 45%;
+    position: relative;
+    margin: 0 1px;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.7);
+}
+
+.intro-brand-name .bean-icon::after {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 46%;
+    width: 2px;
+    height: 70%;
+    background: #4a2c11;
+    border-radius: 2px;
+    transform: rotate(12deg);
+}
+
+.intro-brand-tag {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: #dfcaa2;
+    text-transform: uppercase;
+    margin-top: 4px;
+    opacity: 0.92;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Slogan d'Excellence */
+.intro-slogan-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 26px;
+    width: 100%;
+}
+
+.intro-slogan {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.45;
+    color: #fffaf0;
+    max-width: 440px;
+    margin: 0;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 30px rgba(212, 175, 55, 0.35);
+    background: linear-gradient(135deg, #ffffff 0%, #fceed1 60%, #e2be6b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+}
+
+/* Ligne dorée avec reflet */
+.intro-gold-line {
+    position: relative;
+    width: 170px;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.85) 50%, transparent 100%);
+}
+
+.intro-gold-line::after {
+    content: '◆';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.55rem;
+    color: var(--gold-primary, #d4af37);
+    filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.9));
+}
+
+/* Bouton Découvrir la Carte (CTA Principal Lumineux) */
+.intro-enter-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 15px 36px;
+    background: linear-gradient(135deg, #e6c35c 0%, #d4af37 50%, #aa8222 100%);
+    color: #120d08;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 8px 28px rgba(212, 175, 55, 0.45), 0 2px 8px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-bottom: 20px;
+}
+
+/* Reflet lumineux animé sur le bouton */
+.intro-enter-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+    transform: skewX(-25deg);
+    animation: btnShimmerIntro 2.8s infinite;
+}
+
+@keyframes btnShimmerIntro {
+    0% {
+        left: -120%;
+    }
+    40% {
+        left: 200%;
+    }
+    100% {
+        left: 200%;
+    }
+}
+
+.intro-enter-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 12px 36px rgba(212, 175, 55, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(135deg, #f0cf6f 0%, #dfb942 50%, #b88d27 100%);
+}
+
+.intro-enter-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.intro-enter-btn svg {
+    transition: transform 0.25s ease;
+}
+
+.intro-enter-btn:hover svg {
+    transform: translateX(4px);
+}
+
+/* Barre de progression automatique (4 secondes) */
+.intro-auto-bar-wrap {
+    width: 140px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.intro-auto-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #d4af37, #f7e7c4);
+    border-radius: 999px;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.8);
+    transition: width 0.05s linear;
+}
+
+/* Adaptations Mobiles */
+@media (max-width: 480px) {
+    .intro-brand-name {
+        font-size: 2.2rem;
+    }
+    .intro-brand-tag {
+        font-size: 0.72rem;
+        letter-spacing: 0.22em;
+    }
+    .intro-slogan {
+        font-size: 1.25rem;
+        padding: 0 8px;
+    }
+    .intro-enter-btn {
+        padding: 13px 30px;
+        font-size: 0.88rem;
+    }
+    .intro-skip-btn {
+        top: max(14px, env(safe-area-inset-top, 14px));
+        right: max(14px, env(safe-area-inset-right, 14px));
+    }
 }

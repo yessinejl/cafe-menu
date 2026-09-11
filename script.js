@@ -260,6 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupLightboxListeners();
     setupCartEventListeners();
     loadSelection();
+    initBaristaIntro();
 });
 
 // Gestion du Mode d'Affichage (Liste Starbucks vs Grille Gourmande)
@@ -1201,4 +1202,102 @@ function setupLightboxListeners() {
             }
         }
     }, true); // capture phase pour intercepter avant le handler du modal
+}
+
+// ==========================================================================
+// ÉCRAN D'ACCUEIL IMMERSIF BARISTA (Au Scan du QR Code)
+// Animation Barista, Slogan d'Excellence & Transition Fluide
+// ==========================================================================
+
+function initBaristaIntro() {
+    const introScreen = document.getElementById("barista-intro-screen");
+    if (!introScreen) return;
+
+    const enterBtn = document.getElementById("intro-enter-btn");
+    const skipBtn = document.getElementById("intro-skip-btn");
+    const autoBar = document.getElementById("intro-auto-bar");
+    const video = document.getElementById("intro-video");
+
+    let isDismissed = false;
+    const AUTO_DURATION = 4200; // 4.2 secondes
+    const startTime = Date.now();
+    let progressAnimId = null;
+
+    // Verrouiller le défilement pendant l'écran d'accueil barista
+    document.body.style.overflow = "hidden";
+
+    // Lecture automatique de la vidéo
+    if (video) {
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {
+                // Lecture automatique restreinte : le poster d'exception reste affiché
+            });
+        }
+    }
+
+    // Animation fluide de la barre de progression dorée
+    function updateProgressBar() {
+        if (isDismissed) return;
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(100, (elapsed / AUTO_DURATION) * 100);
+        if (autoBar) {
+            autoBar.style.width = `${progress}%`;
+        }
+        if (elapsed < AUTO_DURATION) {
+            progressAnimId = requestAnimationFrame(updateProgressBar);
+        } else {
+            dismissIntro();
+        }
+    }
+
+    progressAnimId = requestAnimationFrame(updateProgressBar);
+
+    // Fonction de transition fluide vers le menu digital
+    function dismissIntro() {
+        if (isDismissed) return;
+        isDismissed = true;
+
+        if (progressAnimId) {
+            cancelAnimationFrame(progressAnimId);
+        }
+
+        // Rétablir le défilement de la page
+        document.body.style.overflow = "";
+
+        // Transition d'estompage et de zoom
+        introScreen.classList.add("fade-out");
+
+        // Arrêter la vidéo après la transition pour économiser les ressources
+        setTimeout(() => {
+            if (video) {
+                video.pause();
+            }
+            introScreen.style.display = "none";
+        }, 900);
+    }
+
+    // Clic sur "Découvrir la Carte"
+    if (enterBtn) {
+        enterBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            dismissIntro();
+        });
+    }
+
+    // Clic sur "Passer ✕"
+    if (skipBtn) {
+        skipBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            dismissIntro();
+        });
+    }
+
+    // Raccourci clavier (Entrée, Espace ou Échap)
+    document.addEventListener("keydown", function onIntroKey(e) {
+        if (!isDismissed && (e.key === "Enter" || e.key === " " || e.key === "Escape")) {
+            dismissIntro();
+            document.removeEventListener("keydown", onIntroKey);
+        }
+    });
 }

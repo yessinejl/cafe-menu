@@ -17,6 +17,64 @@
 </head>
 <body class="terrasse-mode">
 
+    <!-- =====================================================
+         ÉCRAN D'ACCUEIL IMMERSIF BARISTA (Au Scan du QR Code)
+         ===================================================== -->
+    <div class="barista-intro-screen" id="barista-intro-screen">
+        <!-- Arrière-plan Vidéo / Visuel Barista de Haute Qualité -->
+        <div class="intro-media-container">
+            <video class="intro-video" id="intro-video" autoplay muted loop playsinline preload="auto" poster="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1400&q=85">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-barista-pouring-milk-into-a-cup-of-coffee-40891-large.mp4" type="video/mp4">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-coffee-maker-making-coffee-in-a-glass-cup-40890-large.mp4" type="video/mp4">
+            </video>
+            <div class="intro-steam-overlay">
+                <span class="steam-particle s1"></span>
+                <span class="steam-particle s2"></span>
+                <span class="steam-particle s3"></span>
+                <span class="steam-particle s4"></span>
+            </div>
+            <div class="intro-particles-overlay">
+                <span class="intro-particle p1">✦</span>
+                <span class="intro-particle p2">☕</span>
+                <span class="intro-particle p3">✦</span>
+                <span class="intro-particle p4">✦</span>
+            </div>
+            <div class="intro-gradient-overlay"></div>
+        </div>
+
+        <!-- Bouton Passer en haut à droite -->
+        <button class="intro-skip-btn" id="intro-skip-btn" aria-label="Passer l'introduction">
+            Passer ✕
+        </button>
+
+        <!-- Contenu Central Prestige -->
+        <div class="intro-content">
+            <div class="intro-brand-badge">
+                <span class="intro-bean-glow">☕</span>
+                <span class="intro-brand-name">B<span class="bean-icon" aria-label="o"></span>scoffee</span>
+                <span class="intro-brand-tag">COFFEE & LOUNGE</span>
+            </div>
+
+            <div class="intro-slogan-wrap">
+                <p class="intro-slogan">« Le goût de l'excellence à chaque tasse »</p>
+                <div class="intro-gold-line"></div>
+            </div>
+
+            <button class="intro-enter-btn" id="intro-enter-btn">
+                <span>Découvrir la Carte</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </button>
+
+            <!-- Barre de transition automatique (4s) -->
+            <div class="intro-auto-bar-wrap">
+                <div class="intro-auto-bar" id="intro-auto-bar"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Reflets d'ambiance dorés -->
     <div class="ambient-glow glow-top"></div>
     <div class="ambient-glow glow-bottom"></div>
