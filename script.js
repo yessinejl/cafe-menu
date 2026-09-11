@@ -524,14 +524,13 @@ function renderStarbucksStyleRow(item) {
                 `}
             </div>
 
-            <!-- Informations Produit : Nom et Description -->
+            <!-- Informations Produit : Nom -->
             <div class="sb-item-details">
                 <div class="sb-item-name-wrap">
                     <span class="sb-item-name">${escapeHtml(item.name)}</span>
                     ${isSpecialty ? '<span class="sb-badge-specialty">Bosco</span>' : ''}
                     ${isSupplement ? '<span class="sb-badge-option">Option</span>' : ''}
                 </div>
-                ${item.desc ? `<p class="sb-item-desc">${escapeHtml(item.desc)}</p>` : ''}
             </div>
 
             <!-- Actions Produit : Prix + Bouton Ajout Rapide (+) -->
