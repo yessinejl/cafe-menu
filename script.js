@@ -481,16 +481,8 @@ function renderCategorySection(cat, items) {
     return `
         <section class="category-section" id="section-${cat.id}" data-category="${cat.id}">
             <div class="category-header">
-                <div class="category-title-box">
-                    <div class="category-title-row">
-                        <h2 class="category-main-title">${escapeHtml(cat.title)}</h2>
-                    </div>
-                    <div class="category-desc-line">
-                        ${cat.badge ? `<span class="category-badge-inline">${escapeHtml(cat.badge)}</span> • ` : ''}
-                        <span class="category-items-count">${items.length} choix disponible${items.length > 1 ? 's' : ''}</span>
-                    </div>
-                </div>
-                <div class="category-badge-pill">${items.length} choix</div>
+                <h2 class="category-main-title">${escapeHtml(cat.title)}</h2>
+                <p class="category-count-sub">${items.length} produit(s) disponible(s)</p>
             </div>
 
             <div class="sb-products-list">
@@ -500,8 +492,7 @@ function renderCategorySection(cat, items) {
     `;
 }
 
-// Rendu d'un produit : Option 2 - Photos agrandies dans la liste (Style Starbucks Gourmet)
-// Habillé aux couleurs et à l'élégance du menu papier Boscoffee
+// Rendu d'un produit (Style Carte Pro / Victor Hugo)
 function renderStarbucksStyleRow(item) {
     const formattedPrice = formatPrice(item.price);
     const isSpecialty = item.isSpecialty;
@@ -510,7 +501,7 @@ function renderStarbucksStyleRow(item) {
 
     return `
         <div class="sb-item-row ${isSpecialty ? 'is-specialty' : ''}" id="product-${item.id}" data-item-id="${item.id}" role="button" tabindex="0" aria-label="Voir la fiche de ${escapeHtml(item.name)}, ${formattedPrice} DT">
-            <!-- Photo Agrandie Généreuse (75px-80px) -->
+            <!-- Photo Carrée aux coins arrondis -->
             <div class="sb-item-avatar ${!itemImg ? 'is-fallback' : ''}" aria-hidden="true">
                 ${itemImg ? `
                     <img class="sb-avatar-img" 
@@ -518,34 +509,31 @@ function renderStarbucksStyleRow(item) {
                          alt="${escapeHtml(item.name)}" 
                          loading="lazy"
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <span class="sb-avatar-fallback" style="display: none;">${item.icon || '☕'}</span>
+                    <span class="sb-avatar-fallback" style="display: none;">☕</span>
                 ` : `
-                    <span class="sb-avatar-icon">${item.icon || '☕'}</span>
+                    <span class="sb-avatar-icon">☕</span>
                 `}
             </div>
 
-            <!-- Informations Produit : Nom -->
+            <!-- Nom et Prix -->
             <div class="sb-item-details">
                 <div class="sb-item-name-wrap">
                     <span class="sb-item-name">${escapeHtml(item.name)}</span>
                     ${isSpecialty ? '<span class="sb-badge-specialty">Bosco</span>' : ''}
                     ${isSupplement ? '<span class="sb-badge-option">Option</span>' : ''}
                 </div>
+                <div class="sb-item-price-line">
+                    <span class="sb-item-price-val">${formattedPrice} DT</span>
+                </div>
             </div>
 
-            <!-- Actions Produit : Prix + Bouton Ajout Rapide (+) -->
-            <div class="sb-item-actions">
-                <div class="sb-item-price-wrap">
-                    <span class="sb-item-price">${formattedPrice}</span>
-                    <span class="sb-item-currency">DT</span>
-                </div>
-                <button class="sb-item-quick-add-btn" data-add-id="${item.id}" aria-label="Ajouter ${escapeHtml(item.name)} à ma note" title="Ajouter à ma note">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                </button>
-            </div>
+            <!-- Bouton Ajout Rapide (+) -->
+            <button class="sb-item-quick-add-btn" data-add-id="${item.id}" aria-label="Ajouter ${escapeHtml(item.name)} à ma note" title="Ajouter à ma note">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+            </button>
         </div>
     `;
 }
