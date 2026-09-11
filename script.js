@@ -6,7 +6,7 @@
 const MENU_DATA = [
     {
         id: "matin",
-        title: "Plaisir du Matin",
+        title: "Nos Plaisirs du Matin",
         icon: "🥐",
         group: "sucre",
         badge: "Pâtisseries & Délices",
@@ -21,7 +21,7 @@ const MENU_DATA = [
     },
     {
         id: "thes",
-        title: "Thés",
+        title: "Nos Thés & Infusions",
         icon: "🫖",
         group: "chaud",
         badge: "Tradition & Infusion",
@@ -35,7 +35,7 @@ const MENU_DATA = [
     },
     {
         id: "cafes",
-        title: "Cafés",
+        title: "Nos Cafés",
         icon: "☕",
         group: "chaud",
         badge: "Grains Sélectionnés",
@@ -50,7 +50,7 @@ const MENU_DATA = [
     },
     {
         id: "boissons",
-        title: "Boissons",
+        title: "Nos Boissons",
         icon: "🥤",
         group: "frais",
         badge: "Fraîcheurs & Sodas",
@@ -66,7 +66,7 @@ const MENU_DATA = [
     },
     {
         id: "cafes-gourmands",
-        title: "Cafés Gourmands",
+        title: "Nos Cafés Gourmands",
         icon: "🍨",
         group: "chaud",
         badge: "Signatures Barista",
@@ -81,7 +81,7 @@ const MENU_DATA = [
     },
     {
         id: "jus",
-        title: "Jus",
+        title: "Nos Jus Frais",
         icon: "🍊",
         group: "frais",
         badge: "100% Fruits Frais",
@@ -101,7 +101,7 @@ const MENU_DATA = [
     },
     {
         id: "chocolats",
-        title: "Chocolats",
+        title: "Nos Chocolats",
         icon: "🍫",
         group: "chaud",
         badge: "Chauds & Glacés",
@@ -114,7 +114,7 @@ const MENU_DATA = [
     },
     {
         id: "smoothies",
-        title: "Smoothies",
+        title: "Nos Smoothies",
         icon: "🥑",
         group: "frais",
         badge: "Fraîcheurs Fruitées",
@@ -127,7 +127,7 @@ const MENU_DATA = [
     },
     {
         id: "mocktails",
-        title: "Mocktails",
+        title: "Nos Mocktails",
         icon: "🍹",
         group: "frais",
         badge: "Cocktails Sans Alcool",
@@ -143,7 +143,7 @@ const MENU_DATA = [
     },
     {
         id: "milkshakes",
-        title: "Milkshakes",
+        title: "Nos Milkshakes",
         icon: "🥤",
         group: "frais",
         badge: "Ultra Gourmands",
@@ -162,7 +162,7 @@ const MENU_DATA = [
     },
     {
         id: "crepes-sucrees",
-        title: "Crêpes Sucrées / Pancake",
+        title: "Nos Crêpes Sucrées & Pancakes",
         icon: "🥞",
         group: "sucre",
         badge: "Pâte Maison & Toppings",
@@ -178,7 +178,7 @@ const MENU_DATA = [
     },
     {
         id: "crepes-salees",
-        title: "Crêpes Salées",
+        title: "Nos Crêpes Salées",
         icon: "🧀",
         group: "sale",
         badge: "Salé Chaud & Croustillant",
@@ -193,7 +193,7 @@ const MENU_DATA = [
     },
     {
         id: "omelettes",
-        title: "Omelettes",
+        title: "Nos Omelettes",
         icon: "🍳",
         group: "sale",
         badge: "Cuisinées Minute",
@@ -208,7 +208,7 @@ const MENU_DATA = [
     },
     {
         id: "formules",
-        title: "Les Formules Petit-Déj",
+        title: "Nos Formules Petit-Déjeuner",
         icon: "☀️",
         group: "sale",
         badge: "Complets & Équilibrés",
@@ -457,8 +457,48 @@ function renderMenu() {
             </div>
         `;
     } else {
-        container.innerHTML = sectionsHtml;
+        // Mode Victor Hugo : afficher la grille des catégories si 'Tout le Menu' est sélectionné et sans recherche
+        let overviewHtml = "";
+        if (activeCategoryId === "all" && activeGroup === "all" && !query) {
+            overviewHtml = renderCategoryGridOverview();
+        }
+        container.innerHTML = overviewHtml + sectionsHtml;
     }
+}
+
+// Rendu de la grille des aperçus de catégories (Inspiré par Café Victor Hugo / digitalmenu.tn)
+function renderCategoryGridOverview() {
+    let cardsHtml = MENU_DATA.map(cat => {
+        const sampleItem = cat.items.find(i => i.img) || cat.items[0];
+        const imgUrl = sampleItem ? sampleItem.img : "";
+        return `
+            <div class="cat-overview-card" onclick="selectCategory('${cat.id}')" role="button" tabindex="0" aria-label="Voir la catégorie ${escapeHtml(cat.title)}">
+                <div class="cat-overview-img-wrapper">
+                    ${imgUrl ? `<img class="cat-overview-img" src="${imgUrl}" alt="${escapeHtml(cat.title)}" loading="lazy">` : `<span class="cat-overview-emoji">${cat.icon}</span>`}
+                    <span class="cat-overview-count">${cat.items.length} choix</span>
+                </div>
+                <div class="cat-overview-body">
+                    <span class="cat-overview-icon">${cat.icon}</span>
+                    <span class="cat-overview-title">${escapeHtml(cat.title)}</span>
+                </div>
+            </div>
+        `;
+    }).join("");
+
+    return `
+        <div class="categories-overview-block">
+            <div class="overview-section-header">
+                <div class="overview-title-wrap">
+                    <span class="overview-sparkle">✨</span>
+                    <h3 class="overview-main-title">Aperçu du Menu par Catégories</h3>
+                </div>
+                <p class="overview-subtitle">Toucher une catégorie pour y accéder rapidement</p>
+            </div>
+            <div class="categories-overview-grid">
+                ${cardsHtml}
+            </div>
+        </div>
+    `;
 }
 
 // Rendu d'une section de catégorie
@@ -600,6 +640,24 @@ function setupEventListeners() {
                 const inp = document.getElementById("search-input");
                 if (inp) inp.focus();
             }
+        });
+    }
+
+    // Bouton Retour en haut (Scroll to top - Inspiré Victor Hugo)
+    const scrollTopBtn = document.getElementById("scroll-top-btn");
+    if (scrollTopBtn) {
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.removeAttribute("hidden");
+                scrollTopBtn.classList.add("visible");
+            } else {
+                scrollTopBtn.setAttribute("hidden", "");
+                scrollTopBtn.classList.remove("visible");
+            }
+        });
+
+        scrollTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
         });
     }
 
