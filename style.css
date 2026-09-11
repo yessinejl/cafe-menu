@@ -2290,7 +2290,117 @@ body.terrasse-mode .drawer-clear-btn {
 
 body.terrasse-mode .drawer-empty-msg { color: #474b57; }
 
+/* ==========================================================================
+   VUE SERVEUR — THÈME TERRASSE (FOND CLAIR, LECTURE PARFAITE)
+   ========================================================================== */
+body.terrasse-mode .waiter-view {
+    background: #f6f5f0;
+    color: #1a1e29;
+}
 
+body.terrasse-mode .waiter-header {
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+body.terrasse-mode .waiter-back-btn {
+    color: #1a1e29;
+    background: #f3f0e6;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+body.terrasse-mode .waiter-back-btn:hover {
+    background: #e8e3d3;
+    color: #000000;
+}
+
+body.terrasse-mode .waiter-header-title {
+    color: #1a1e29;
+    font-weight: 700;
+}
+
+body.terrasse-mode .waiter-brand {
+    background: linear-gradient(180deg, #ffffff 0%, #f9f8f4 100%);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+    padding: 24px 20px 16px;
+}
+
+body.terrasse-mode .waiter-logo {
+    background: linear-gradient(135deg, #a67c00 0%, #d4af37 50%, #805c00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 1px 2px rgba(166, 124, 0, 0.25));
+}
+
+body.terrasse-mode .waiter-tagline {
+    color: #7b8293;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+}
+
+body.terrasse-mode .waiter-items-list {
+    background: #f6f5f0;
+    padding: 16px 12px;
+}
+
+body.terrasse-mode .waiter-item-row {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 14px;
+    margin-bottom: 10px;
+    padding: 14px 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+body.terrasse-mode .waiter-item-qty-badge {
+    background: linear-gradient(135deg, #f0d57d 0%, #d4af37 100%);
+    color: #1a1306;
+    font-weight: 800;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(212, 175, 55, 0.35);
+}
+
+body.terrasse-mode .waiter-item-name {
+    color: #151922;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+body.terrasse-mode .waiter-item-subtotal {
+    color: #8c6504;
+    font-weight: 800;
+    font-size: 16.5px;
+}
+
+body.terrasse-mode .waiter-total-section {
+    background: #ffffff;
+    border-top: 2px solid #d4af37;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+    padding: 20px 24px 38px;
+}
+
+body.terrasse-mode .waiter-total-row span:first-child {
+    color: #2b3140;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+body.terrasse-mode .waiter-total-value {
+    color: #8c6504;
+    font-weight: 900;
+    font-size: 30px;
+    text-shadow: 0 1px 2px rgba(140, 101, 4, 0.15);
+}
+
+body.terrasse-mode .waiter-note {
+    color: #6a7182;
+    font-weight: 500;
+    margin-top: 8px;
+}
 
 .footer {
     border-top: 1px solid rgba(212, 175, 55, 0.15);
@@ -3083,21 +3193,46 @@ body:not(.terrasse-mode) .scroll-top-btn:hover {
     margin-bottom: 18px;
 }
 
-.intro-bean-glow {
-    font-size: 2rem;
-    display: inline-block;
-    filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.85));
-    animation: beanGlowPulse 2.8s ease-in-out infinite alternate;
+/* Emblème Prestige Barista (Vectoriel Haute Définition) */
+.intro-emblem-wrap {
+    width: 68px;
+    height: 68px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    animation: emblemFloatGlow 3.2s ease-in-out infinite alternate;
 }
 
-@keyframes beanGlowPulse {
+.intro-emblem-wrap::before {
+    content: '';
+    position: absolute;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0) 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.intro-luxury-emblem {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 4px 18px rgba(212, 175, 55, 0.55));
+}
+
+@keyframes emblemFloatGlow {
     0% {
-        transform: scale(0.95);
-        filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
+        transform: translateY(0) scale(0.98);
+        filter: drop-shadow(0 4px 14px rgba(212, 175, 55, 0.45));
     }
     100% {
-        transform: scale(1.1);
-        filter: drop-shadow(0 0 26px rgba(230, 195, 92, 0.95));
+        transform: translateY(-4px) scale(1.03);
+        filter: drop-shadow(0 6px 22px rgba(235, 200, 100, 0.75));
     }
 }
 

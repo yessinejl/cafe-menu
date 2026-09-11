@@ -35,7 +35,7 @@
             </div>
             <div class="intro-particles-overlay">
                 <span class="intro-particle p1">✦</span>
-                <span class="intro-particle p2">☕</span>
+                <span class="intro-particle p2">✦</span>
                 <span class="intro-particle p3">✦</span>
                 <span class="intro-particle p4">✦</span>
             </div>
@@ -50,7 +50,47 @@
         <!-- Contenu Central Prestige -->
         <div class="intro-content">
             <div class="intro-brand-badge">
-                <span class="intro-bean-glow">☕</span>
+                <div class="intro-emblem-wrap" aria-hidden="true">
+                    <svg class="intro-luxury-emblem" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="goldGradientCrest" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#fff8de"/>
+                                <stop offset="35%" stop-color="#f5d47a"/>
+                                <stop offset="70%" stop-color="#d4af37"/>
+                                <stop offset="100%" stop-color="#997217"/>
+                            </linearGradient>
+                            <linearGradient id="goldFillCrest" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="rgba(245, 212, 122, 0.28)"/>
+                                <stop offset="100%" stop-color="rgba(153, 114, 23, 0.04)"/>
+                            </linearGradient>
+                            <filter id="goldCrestGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#d4af37" flood-opacity="0.45"/>
+                            </filter>
+                        </defs>
+
+                        <!-- Anneau extérieur luxe à tirets délicats -->
+                        <circle cx="34" cy="34" r="31" stroke="url(#goldGradientCrest)" stroke-width="1.2" stroke-dasharray="3 3.5" opacity="0.75"/>
+                        <!-- Cercle intérieur fin -->
+                        <circle cx="34" cy="34" r="27.5" stroke="url(#goldGradientCrest)" stroke-width="0.8" opacity="0.45"/>
+
+                        <!-- Étoile royale supérieure -->
+                        <path d="M34 11L35.6 14.8L39.5 16.2L35.6 17.6L34 21.4L32.4 17.6L28.5 16.2L32.4 14.8Z" fill="url(#goldGradientCrest)" filter="url(#goldCrestGlow)"/>
+
+                        <!-- Volutes de vapeur Barista stylisées -->
+                        <path d="M28 23.5C26.8 25.8 28.6 27.2 27.5 29.5" stroke="url(#goldGradientCrest)" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+                        <path d="M34 22C32.8 24.5 35 26.2 34 29.5" stroke="url(#goldGradientCrest)" stroke-width="1.6" stroke-linecap="round"/>
+                        <path d="M40 23.5C38.8 25.8 40.6 27.2 39.5 29.5" stroke="url(#goldGradientCrest)" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+
+                        <!-- Tasse Barista Prestige (Proportions raffinées) -->
+                        <path d="M20.5 30.5H47.5V39.5C47.5 44.8 41.5 47.5 34 47.5C26.5 47.5 20.5 44.8 20.5 39.5V30.5Z" fill="url(#goldFillCrest)" stroke="url(#goldGradientCrest)" stroke-width="1.8" stroke-linejoin="round"/>
+                        <!-- Anse géométrique fine -->
+                        <path d="M47.5 32.5H51C53.2 32.5 55 34.3 55 36.5C55 38.7 53.2 40.5 51 40.5H47.5" stroke="url(#goldGradientCrest)" stroke-width="1.8" stroke-linecap="round"/>
+                        <!-- Liseré de crema -->
+                        <line x1="24.5" y1="34" x2="43.5" y2="34" stroke="url(#goldGradientCrest)" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+                        <!-- Soucoupe stylisée -->
+                        <path d="M17 50.5C23 53.5 45 53.5 51 50.5" stroke="url(#goldGradientCrest)" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </div>
                 <span class="intro-brand-name">B<span class="bean-icon" aria-label="o"></span>scoffee</span>
                 <span class="intro-brand-tag">COFFEE & LOUNGE</span>
             </div>
