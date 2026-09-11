@@ -666,7 +666,7 @@ function escapeHtml(str) {
 const ALL_ITEMS_MAP = {};
 MENU_DATA.forEach(cat => {
     cat.items.forEach(item => {
-        ALL_ITEMS_MAP[item.id] = { ...item, _catTitle: cat.title, _catIcon: cat.icon, _catBadge: cat.badge };
+        ALL_ITEMS_MAP[item.id] = { ...item, _catId: cat.id, _catTitle: cat.title, _catIcon: cat.icon, _catBadge: cat.badge };
     });
 });
 
@@ -930,8 +930,8 @@ function updateSelectionUI() {
         } else {
             drawerItems.innerHTML = userSelection.map(item => `
                 <div class="drawer-item-row" data-cart-id="${item.id}">
-                    <span class="drawer-item-emoji">${item.icon || '☕'}</span>
-                    <div class="drawer-item-name">
+                    <span class="drawer-item-emoji" data-item-id="${item.id}" role="button" title="Voir les détails de ${escapeHtml(item.name)}">${item.icon || '☕'}</span>
+                    <div class="drawer-item-name" data-item-id="${item.id}" role="button" title="Voir les détails de ${escapeHtml(item.name)}">
                         ${escapeHtml(item.name)}
                         <span class="drawer-item-unit-price">${formatPrice(item.price)} DT / unité</span>
                     </div>
@@ -960,12 +960,17 @@ function updateSelectionUI() {
             `;
         } else {
             waiterItems.innerHTML = userSelection.map(item => `
-                <div class="waiter-item-row">
+                <div class="waiter-item-row" data-item-id="${item.id}" role="button" tabindex="0" title="Toucher pour voir les détails de ${escapeHtml(item.name)}">
                     <div class="waiter-item-left">
                         <span class="waiter-item-qty-badge">${item.qty}x</span>
                         <span class="waiter-item-name">${escapeHtml(item.name)}</span>
                     </div>
-                    <span class="waiter-item-subtotal">${formatPrice(item.price * item.qty)} DT</span>
+                    <div class="waiter-item-right">
+                        <span class="waiter-item-subtotal">${formatPrice(item.price * item.qty)} DT</span>
+                        <svg class="waiter-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
                 </div>
             `).join("");
         }
@@ -1026,6 +1031,36 @@ function closeWaiterView() {
     }
 }
 
+// Redirection fluide vers un produit depuis le récapitulatif ou le tiroir
+function redirectToProduct(itemId) {
+    if (!itemId) return;
+
+    // Fermer les vues récapitulatif et tiroir
+    closeWaiterView();
+    closeSelectionDrawer();
+
+    setTimeout(() => {
+        // Mettre à jour la pastille de catégorie si le produit est typé
+        const item = ALL_ITEMS_MAP[itemId];
+        if (item && item._catId) {
+            updateActiveCategoryPill(item._catId);
+        }
+
+        // Faire défiler l'écran vers le produit dans la carte avec flash lumineux
+        const productEl = document.querySelector(`[data-item-id="${itemId}"]`);
+        if (productEl) {
+            productEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            productEl.classList.add("highlight-product-flash");
+            setTimeout(() => {
+                productEl.classList.remove("highlight-product-flash");
+            }, 1800);
+        }
+
+        // Ouvrir la fiche détaillée du produit
+        openProductModal(itemId);
+    }, 120);
+}
+
 function setupCartEventListeners() {
     // Clic sur la bulle flottante → ouvre le tiroir
     const bubbleBtn = document.getElementById("cart-bubble-btn");
@@ -1051,13 +1086,41 @@ function setupCartEventListeners() {
     if (drawerItems) {
         drawerItems.addEventListener("click", (e) => {
             const btn = e.target.closest(".drawer-qty-btn");
-            if (!btn) return;
-            const action = btn.dataset.action;
-            const id = btn.dataset.id;
-            if (action === "inc") {
-                updateSelectionQty(id, 1);
-            } else if (action === "dec") {
-                updateSelectionQty(id, -1);
+            if (btn) {
+                const action = btn.dataset.action;
+                const id = btn.dataset.id;
+                if (action === "inc") {
+                    updateSelectionQty(id, 1);
+                } else if (action === "dec") {
+                    updateSelectionQty(id, -1);
+                }
+                return;
+            }
+
+            // Clic sur le nom ou l'icône de l'article dans le tiroir → redirection vers le produit
+            const itemTarget = e.target.closest("[data-item-id]");
+            if (itemTarget && itemTarget.dataset.itemId) {
+                redirectToProduct(itemTarget.dataset.itemId);
+            }
+        });
+    }
+
+    // Redirection au clic sur un article dans la vue serveur (Récapitulatif)
+    const waiterItems = document.getElementById("waiter-items-list");
+    if (waiterItems) {
+        waiterItems.addEventListener("click", (e) => {
+            const row = e.target.closest(".waiter-item-row");
+            if (row && row.dataset.itemId) {
+                redirectToProduct(row.dataset.itemId);
+            }
+        });
+        waiterItems.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                const row = e.target.closest(".waiter-item-row");
+                if (row && row.dataset.itemId) {
+                    e.preventDefault();
+                    redirectToProduct(row.dataset.itemId);
+                }
             }
         });
     }
