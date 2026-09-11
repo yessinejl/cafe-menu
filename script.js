@@ -285,39 +285,9 @@ function setViewMode(mode, save = true) {
     if (gridBtn) gridBtn.classList.toggle("active", mode === "grid");
 }
 
-// Gestion du Thème Terrasse / Plein Soleil vs Lounge Sombre
+// Thème Terrasse fixé par défaut
 function initTheme() {
-    applyTheme(isTerrasseMode);
-}
-
-function toggleTheme() {
-    isTerrasseMode = !isTerrasseMode;
-    localStorage.setItem("boscoffee_terrasse_mode", isTerrasseMode);
-    applyTheme(isTerrasseMode);
-}
-
-function applyTheme(isTerrasse) {
-    const btn = document.getElementById("theme-toggle-btn");
-    const icon = btn ? btn.querySelector(".theme-icon") : null;
-    const badge = btn ? btn.querySelector(".theme-label-badge") : null;
-
-    if (isTerrasse) {
-        document.body.classList.add("terrasse-mode");
-        if (icon) icon.textContent = "🌙";
-        if (badge) badge.textContent = "Lounge";
-        if (btn) {
-            btn.setAttribute("title", "Passer en Mode Lounge (Sombre)");
-            btn.setAttribute("aria-label", "Basculer en Mode Lounge (Sombre)");
-        }
-    } else {
-        document.body.classList.remove("terrasse-mode");
-        if (icon) icon.textContent = "☀️";
-        if (badge) badge.textContent = "Terrasse";
-        if (btn) {
-            btn.setAttribute("title", "Passer en Mode Terrasse (Plein Soleil)");
-            btn.setAttribute("aria-label", "Basculer en Mode Terrasse (Plein Soleil)");
-        }
-    }
+    document.body.classList.add("terrasse-mode");
 }
 
 // Rendu des boutons de catégories (Barre défilante horizontale)
@@ -555,14 +525,6 @@ function setupEventListeners() {
     if (clearBtn) {
         clearBtn.addEventListener("click", () => {
             clearSearch();
-        });
-    }
-
-    // Bouton de bascule de thème (Mode Terrasse / Lounge)
-    const themeToggleBtn = document.getElementById("theme-toggle-btn");
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener("click", () => {
-            toggleTheme();
         });
     }
 
